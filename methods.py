@@ -1,9 +1,4 @@
-from difflib import Match
-from nis import match
 import re
-
-text = """One, two, one, grt:   Mr. THREE. Four, five, six?     
-Seven eight, nine ten M.B.!          """
 
 def cutText(text):
     text = re.sub(r'[\s+\t\n]+', ' ', text)
@@ -15,11 +10,6 @@ def cutSentences(sentences:list):
         words.append(re.findall(r'\w+', s))
     return words
 
-sentences = cutText(text)
-
-words = cutSentences(sentences)
-print(words)
-
 def averageLenght(words):
     sAmount = len(words)
     wAmount = 0
@@ -30,10 +20,9 @@ def averageLenght(words):
     median.sort()
     centre = len(median) % 2
     if centre == 0:
-        print(f"Median is {int((median[centre] + median[centre - 1]) / 2)}")
+        return int((median[centre] + median[centre - 1]) / 2), int(wAmount / sAmount)
     else:
-        print(f"Median is {median[centre]}")
-    print(f"There are about {int(wAmount / sAmount)} words in one sentence")
+        return median[centre], int(wAmount / sAmount)
 
 def meetWords(words):
     myDict = {}
@@ -44,11 +33,11 @@ def meetWords(words):
                 myDict[w] += 1
             else:
                 myDict[w] = 1
-    print(myDict)
+    return myDict
 
 def grams(words, n, k:int):
     allGrams = {}
-    test = []
+    output = {}
     for s in words:
         for w in s:
             if len(w) >= n:
@@ -64,9 +53,5 @@ def grams(words, n, k:int):
     for j, v in allGrams.items(): 
         i += 1
         if i > len(allGrams) - k:
-            print(j, v)
-
-grams(words, 2, 2)
-
-averageLenght(words)
-meetWords(words)
+            output[j] = v #print(j, v)
+    return output
