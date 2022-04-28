@@ -1,8 +1,10 @@
+import builtins
 import codecs
 import dis
 import inspect
 import opcode
 import re
+from types import FunctionType, CodeType, LambdaType
 
 
 def ser(obj):  # serialize
@@ -19,9 +21,9 @@ def pre_ser(obj):
         return tl_ser(obj)
     elif isinstance(obj, dict):
         return dict_ser(obj)
-    # elif inspect.iscode(obj):
-        # return serialize_code(obj)
-    elif inspect.isfunction(obj):  # inspect.isfunction(obj):
+    elif inspect.iscode(obj):
+        return ser_func(FunctionType(obj, {}))  # serialize_code(obj)
+    elif inspect.isfunction(obj) or inspect.ismethod(obj) or isinstance(obj, LambdaType):
         return ser_func(obj)
     elif inspect.isclass(obj):
         return ser_class(obj)
@@ -47,10 +49,13 @@ def basic_type_ser(obj):  # str & None & bool & int & float
 def tl_ser(obj):  # tuple & list $ bytes
     temp_dict = dict()
     if isinstance(obj, list):
+        m_key = "list"
         temp_dict["list"] = tuple(ser(el) for el in obj)
     elif isinstance(obj, tuple):
+        m_key = "tuple"
         temp_dict["tuple"] = tuple(ser(el) for el in obj)
     else:
+        m_key = "bytes"
         temp_dict["bytes"] = tuple(ser(el) for el in obj)
     return temp_dict
 
@@ -58,9 +63,10 @@ def tl_ser(obj):  # tuple & list $ bytes
 def dict_ser(obj):
     temp_dict = dict()
     temp_dict["dict"] = {}
-    # for pair in obj:
-    #    temp_dict["dict"][pre_ser(pair)] = pre_ser(obj[pair])
-    temp_dict["dict"] = tuple((ser(pair), ser(obj[pair])) for pair in obj)
+    for k, v in obj.items():
+        for kk, vv in pre_ser(k).items():  # get just one key_type: key_value
+            key = tuple((kk, vv))
+        temp_dict["dict"][key] = pre_ser(v)
     return temp_dict
 
 
@@ -128,15 +134,18 @@ def nesting(level: int) -> str:
     return result
 
 
-def serialize_prop(obj) -> str:
-    return f"{obj}"
+def serialize_prop(obj):
+    return {"str": f"{obj}"}
 
 
 def glob_variables(func):
     gl_vars = {}
     for current_gl in func.__code__.co_names:  # search in used global variables
         if current_gl in func.__globals__:  # check if they are visible
-            gl_vars[current_gl] = pre_ser(func.__globals__[current_gl])
+            if inspect.isfunction(func.__globals__[current_gl]) and func.__globals__[current_gl].__name__ == func.__name__:
+                gl_vars[current_gl] = func
+            else:
+                gl_vars[current_gl] = pre_ser(func.__globals__[current_gl])  # pre_ser(func.__globals__[current_gl])
     return gl_vars
 
 
@@ -151,14 +160,22 @@ def glob_variables(func):
 
 
 def ser_func(obj):
+    if inspect.ismethod(obj):
+        obj = obj.__func__
     output = dict()
     args = dict()
     cycle = [c for c in obj.__code__.__dir__() if c.startswith('co_')]
     for c in cycle:
         attr = getattr(obj.__code__, c)
         if isinstance(attr, bytes):
-            attr = codecs.decode(attr, 'raw_unicode_escape')
-        args[c] = pre_ser(attr)  # built-in method AS
+            attr = attr.decode('raw_unicode_escape')
+        if isinstance(attr, (list, tuple, dict)):
+            converted_vals = []
+            for val in attr:
+                converted_vals.append(val)  # pre_ser val
+            args[c] = pre_ser(converted_vals)  # pre_ser
+            continue
+        args[c] = pre_ser(attr)
 
     m_key = "__func__"
     output[m_key] = {"__name__": obj.__name__,
@@ -172,25 +189,131 @@ def ser_func(obj):
 #   "__class__" :
 #       {
 #       "__name__": obj.__name,
-#       "__globals__": {{:}, ...},
-#       "__args__": {{:}, ...},
-#
-#
-#
-#
+#       "__attrs__": {{:}, ...},
 #       }
 # }
 
 
 def ser_class(obj):
     output = dict()
+    out_attrs = dict()
     m_key = "__class__"
-    output[m_key] = {'__name__': obj.__name__}
     attrs = [i for i in dir(obj) if not i.startswith('__') or inspect.isfunction(getattr(obj, i))]
     for attr in attrs:
         attr_value = getattr(obj, attr)
-        output[attr] = pre_ser(attr_value)
+        out_attrs[attr] = pre_ser(attr_value)
+
+    output[m_key] = {'__name__': obj.__name__,
+                     '__attrs__': out_attrs}
     return output
+
+
+SIMPLE_TYPES = ["str", "int", "float", "bool", "None"]
+L_T_B_TYPES = ["list", "tuple", "bytes"]
+
+
+def des(obj):
+    for k, v in obj.items():
+        if k in SIMPLE_TYPES:
+            return des_types(v)
+        elif k in L_T_B_TYPES:
+            return des_ltb(k, v)
+        elif k == "dict":
+            return des_dict(v)
+        elif k == "__func__":
+            return des_func(v)
+        elif k == "__class__":
+            return des_class(v)
+
+
+def des_types(obj):
+    return obj
+
+
+def des_ltb(tp, obj):
+    output = []
+    for el in obj:
+        output.append(des(el))
+
+    if tp == "tuple":
+        output = tuple(output)
+    elif tp == "bytes":
+        output = bytes(output)
+    return output
+
+
+def des_dict(obj):
+    output = dict()
+    for k, v in obj.items():
+        key = des({k[0]: k[1]})
+        output[key] = des(v)
+
+    return output
+
+
+def des_func(obj):
+    args = obj["__args__"]
+    globs = obj["__globals__"]
+    globs["__builtins__"] = builtins
+    for key in obj["__globals__"]:
+        if key in des(args["co_names"]):  # list
+            if key != des(args["co_name"]):
+                globs[key] = des(obj["__globals__"][key])
+
+    for k, v in args.items():
+        if k == "co_consts":
+            consts = []
+            for val in des(args["co_consts"]):
+                if inspect.isfunction(val) or inspect.ismethod(val) or isinstance(val, LambdaType):
+                    # val = des(val)
+                    consts.append(val.__code__)
+                    continue
+                consts.append(val)
+            args[k] = consts
+        else:
+            args[k] = des(args[k])
+
+
+    '''consts = []
+    for val in des(args["co_consts"]):
+        if inspect.isfunction(val) or inspect.ismethod(val) or isinstance(val, LambdaType):
+            val = des(val)
+            consts.append(val.__code__)
+            continue
+        consts.append(val)'''
+    # args["co_consts"] = consts
+
+    '''for val in args:
+        if isinstance(des(args[val]), (list, tuple, dict)):
+            lst = []
+            for value in (des(args[val])):
+                lst.append(value)
+            args[val] = lst'''
+
+    code = CodeType(args['co_argcount'],
+                    args['co_posonlyargcount'],
+                    args['co_kwonlyargcount'],
+                    args['co_nlocals'],
+                    args['co_stacksize'],
+                    args['co_flags'],
+                    bytes(args['co_code'], 'raw_unicode_escape'),
+                    tuple(args['co_consts']),
+                    tuple(args['co_names']),
+                    tuple(args['co_varnames']),
+                    args['co_filename'],
+                    args['co_name'],
+                    args['co_firstlineno'],
+                    bytes(args['co_lnotab'], 'raw_unicode_escape'),
+                    tuple(args['co_freevars']),
+                    tuple(args['co_cellvars']))
+    return FunctionType(code, globs)
+
+
+def des_class(obj):
+    dct = {}
+    for attr, val in obj.items():
+        dct[attr] = pre_ser(val)
+    return type(obj["__name__"], (), dct)
 
 
 def serialize_instance(instance_obj):
