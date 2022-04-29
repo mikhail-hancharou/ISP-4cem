@@ -1,8 +1,8 @@
 from modules.SerializeCreate import Creator
 from modules.Serializer import Serializer
-from modules.JsonSerializer import JsonSerializer
+from modules.TOMLSerializer import TomlSerializer
 
 
-class JsonSerializerCreator(Creator):
+class TomlSerializerCreator(Creator):
     def create_serializer(self) -> Serializer:
-        return JsonSerializer()
+        return TomlSerializer()

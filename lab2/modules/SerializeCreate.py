@@ -3,5 +3,5 @@ from abc import ABC, abstractmethod
 
 class Creator(ABC):
     @abstractmethod
-    def create_serialize(self):
+    def create_serializer(self):
         pass

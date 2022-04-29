@@ -1,178 +1,274 @@
+import re
+
 from modules.Serializer import Serializer
-from modules import hard_tools
-import inspect
+from modules.hard_tools import ser
+from modules.hard_tools import des
 
 
 class JsonSerializer(Serializer):
     def dump(self, obj, file: str):
-        json_str = to_json(obj)
+        json_str = ser_json(ser(obj))
         try:
             with open(file, 'w') as f:
-                f.write(JsonSerializer.dumps(obj))
+                f.write(JsonSerializer.dumps(json_str))
         except IOError:
             print('File IO Error')
         return json_str
 
     def dumps(self, obj):
-        pass
+        ser_obj = ser(obj)
+        return serr_json(ser_obj)
 
     def load(self, file):
         pass
 
     def loads(self, s):
+        return des(des_json(s))
+
+
+def nesting(level) -> str:
+    output = ""
+    for i in range(level):
+        output += "\t"
+    return output
+
+
+def serr_json(obj) -> str:
+    if type(obj) == dict:
+        serialized = []
+        for k, v in obj.items():
+            serialized.append(f"{serr_json(k)}: {serr_json(v)}")
+        ans = ", ".join(serialized)
+        return f"{{{ans}}}"
+    elif type(obj) == tuple or type(obj) == int:
+        return str(obj)
+    else:
+        return f"\'{str(obj)}\'"
+
+
+def ser_json(obj, level) -> str:
+    if isinstance(obj, dict):
+        start = "{{\n{0}".format(nesting(level))
+        end = "\n{0}}}".format(nesting(level))
+        output = ""
+        items = []
+        for k, v in obj.items():
+            vv = ser_json(v, level + 1)
+            items.append(nesting(level + 1) + str(k) + ": " + vv)
+            output = start + ",\n".join(items) + end
+        return output
+    else:
+        return str(obj)
+    # else:
+    #    return f"\"{str(obj)}\""
+
+
+def des_json(s: str):
+    output = dict()
+    for i in range(len(s)):
+        if i == 0 and s[i] == "{":
+            if s[i + 1] == "}":
+                return dict()
+            return des_dict(s[1:])
+        elif i == 0 and s[i] == "(":
+            return find_tuple(s[1:])
+        elif i == 0 and s[i] == "\'":
+            return search_for_word(s[i + 1:])[0]
+        else:
+            return s
+    return output
+
+
+def des_dict(s):
+    count = 1
+    st = ""
+    for i in range(len(s)):
+        if s[i] == "{":
+            count += 1
+        elif s[i] == "}":
+            if count == 1:
+                st = s[:i]
+                break
+            else:
+                count -= 1
+    s = st
+    output = dict()
+    if len(s) == 0:
+        return
+    while 1:
+        key = find_key(s)
+        s = go_to_value(s)
+        value = des_json(s)
+        if key in TYPES:
+            value = type_check(key, value)
+        output[key] = value
+        if isinstance(value, str | tuple | dict | list):
+            strr = str(value)
+            strr = strr.replace("\\\\", "\\")
+            s = s[len(strr):]  # + get_minus((str(value)))
+        s = go_to_next_key(s)
+        if len(s) <= 2:
+            break
+    return output
+
+
+def get_minus(value):
+    output = 0
+    for i in range(len(value) - 1):
+        if value[i] == " " and re.fullmatch(r"\d", value[i + 1]):
+            output += 2
+    return output
+
+
+def go_to_value(s):
+    for i in range(1, len(s)):
+        if s[i] == ":":
+            return s[i + 2:]
+
+
+def go_to_next_key(s):
+    count = 1
+
+    for i in range(0, len(s)):  # 0 1
+        if s[i] == ",":
+            return s[i + 2:]
+
+    for i in range(1, len(s)):
+        if s[i] == "}":
+            if count == 1:
+                return s[i + 3:]
+            else:
+                count -= 1
+        elif s[i] == "{":
+            count += 1
+    return ""
+
+
+def find_key(s):
+    if s[0] == "\'":
+        for i in range(1, len(s)):
+            if s[i] == "\'":
+                return s[1:i]
+    else:
+        return des_json(s)
+
+
+def find_value(s):
+    let = ""
+    if s[0] == "{":
+        let = "}"
+    elif s[0] == "(":
+        pass
+    for i in range(len(s)):
         pass
 
 
-def to_json(obj):
-    if isinstance(obj, int | float | str | bool | type(None)):
-        return basic_type_to_json(obj)
-    elif isinstance(obj, list | tuple):
-        return tl_to_json(obj)
-    elif isinstance(obj, dict):
-        return dict_to_json(obj)
-    elif inspect.isclass(obj) or inspect.isfunction(obj):
-        return dict_to_json(tools.class_to_dict(obj))
-    else:
-        return dict_to_json(tools.obj_to_dict(obj))
-
-
-def serialize_json(obj) -> str:
-    if type(obj) == tuple:
-        serialized = []
-        for i in obj:
-            serialized.append(f"{serialize_json(i)}")
-        ans = ", ".join(serialized)
-        return f"[{ans}]"
-    else:
-        return f"\"{str(obj)}\""
-
-
-'''def dict_format(k, v):  # rewrite in dict format:  'key':value
-    return f"'{k}':{v}"
-
-
-def tl_to_json(obj):  # tuple & list
-    temp_list = []
-    for i in obj:
-        temp_list.append(to_json(obj))
-    output_str = ', '.join(temp_list)
-    return '[ ' + output_str + ' ]'
-
-
-def basic_type_to_json(obj):  # str & None & bool & int & float
-    if isinstance(obj, str):
-        return f"'{obj}'"
-    elif isinstance(obj, type(None)):
-        return "none"
-    elif isinstance(obj, bool):
-        return "true" if obj else "false"
-    elif isinstance(obj, (int, float)):
-        return f"{obj}"
-
-
-def dict_to_json(dct):
-    temp_list = []
-    for key, value in dct.items():
-        temp_list.append(hard_tools.dict_format(key, to_json(value)))
-    output_str = ', '.join(temp_list)
-    return f'{{{output_str}}}'
-
-
-def from_json(text=' '):
-    if text[0] == '{':
-        object_dict = _json_to_dict(text, 0)[0]
-        if object_dict.get('type') is None:
-            return tools.get_object_recursive(object_dict)
-        else:
-            return tools.get_object(object_dict)
-    elif text[0] == '[':
-        return _json_to_list(text, 1)[0]
-    else:
-        raise IOError('Json file should start with symbols: "{" or "["')
-
-
-def _json_to_list(text, start):
+def find_tuple(s):
+    st = ""
     output = []
-    i = start
-    while i < len(text) - 1:
-        i += 1
-        if text[i] == ']':
-            return output, i
-        if text[i] == ' ' or text[i] == ',':
-            continue
-        if text[i] == '[':
-            elem = _json_to_list(text, i + 1)
-            output.append(elem[0])
-            i = elem[1]
-
-        elif text[i] == '{':
-            elem = _json_to_dict(text, i + 1)
-            output.append(elem[0])
-            i = elem[1]
-        else:
-            elem = _json_to_basic(text, i)
-            output.append(elem[0])
-            i = elem[1]
-    raise IOError("Неверный формат")
+    count = 1
+    for i in range(len(s)):
+        if s[i] == "(":
+            count += 1
+        elif s[i] == ")":
+            if count == 1:
+                st = s[:i]
+                if (len(st) == 0):
+                    return tuple()
+                elif st[0] == "\'":
+                    return tuple(get_pair(st[1:len(st)]))
+                else:
+                    return get_dict_el(st)
 
 
-def _json_to_dict(text, start):
-    output = {}
-    i = start
-    while i < len(text) - 1:
-        i += 1
-        if text[i] == '}':
-            return output, i
-        try:
-            elem = _get_token(text, i)
-            elem2 = _get_token(text, elem[1] + 1)
-            output[elem[0]] = elem2[0]
-            i = elem2[1]
-        except IOError as error:
-            return None
-    raise IOError("Неверный формат")
+def get_dict_el(s):
+    st = 0
+    preout = []
+    for i in range(len(s)):
+        if s[i] == "{":
+            st = i
+        elif s[i] == "}":
+            preout.append(s[st:i + 1])
+    output = []
+    for i in preout:
+        output.append(des_json(i))
+    return tuple(output)  # tuple
 
 
-def _json_to_basic(text, start):
-    tokens = []
-    quot = False
-    is_float = False
-    for i in range(start, len(text)):
-        if (text[i] in ': ') and not quot:
-            continue
-        if text[i] in ',]}' and not quot:
-            def to_int_or_float(s, f):
-                try:
-                    if f:
-                        return float(s)
-                    return int(s)
-                except ValueError:
-                    return None
-
-            switcher = {'true': True, 'false': False, 'none': None}
-            str = ''.join(tokens)
-            return switcher.get(str, to_int_or_float(str, is_float)), i - 1
-        if text[i] == "'" and quot:
-            return ''.join(tokens), i
-        if text[i] == "'":
-            quot = not quot
-            continue
-        if text[i] == '.':
-            is_float = True
-        tokens.append(text[i])
-    raise IOError("Неверный формат")
+TYPES = ["str", "int", "bool", "float", "None"]
+COLL = ["list", "tuple", "bytes"]
+def get_pair(s):
+    output = []
+    word, ind = search_for_word(s[0:])
+    if word in TYPES:
+        s = s[ind + 4: len(s) - 1]
+        output.append(word)
+        output.append(s)
+        output[1] = type_check(output[0], output[1])
+    else:
+        s = s[ind + 2:]
+        output.append(des_json(s))
+    return output
 
 
-def _get_token(text, start):
-    for i in range(start, len(text)):
-        if text[i] in ', :':
-            continue
-        if text[i] in '}]':
-            raise IOError(f"{i}")
-        if text[i] == '[':
-            return _json_to_list(text, i + 1)
-        elif text[i] == '{':
-            return _json_to_dict(text, i)
-        else:
-            return _json_to_basic(text, i)
-            '''
+def find_coll(s):
+    pass
+
+
+def search_for_word(s):
+    for i in range(len(s)):
+        if s[i] == "\'":
+            return s[0:i], i
+
+
+def search_for_tuple(s):
+    counter = 1
+    for i in range(len(s)):
+        if s[i] == ")":
+            if counter == 1:
+                return s[0:i], i + 1
+            else:
+                counter -= 1
+        elif s[i] == "(":
+            counter += 1
+
+
+
+def search_for_value(s):
+    counter = 1
+    for i in range(len(s)):
+        if s[i] == "}":
+            if counter == 1:
+                return s[0:i], i + 1
+            else:
+                counter -= 1
+        elif s[i] == "{":
+            counter += 1
+
+def dict_it(s):
+    output = []
+    for i in range(len(s)):
+        if s[i] == "\'":
+            word, ind = search_for_word(s[0:i+1])
+            s = s[ind + 1:]  # skip '
+            output.append(word)
+    output = type_check(output[0], output[1])
+    return dict(output)
+
+
+def type_check(tp, v):
+    if tp == "int":
+        return int(v)
+    elif tp == "float":
+        return float(v)
+    elif tp == "bool":
+        return bool(v)
+    elif tp == "None":
+        return None
+    elif tp == "str":
+        return v
+    else:
+        return des_json(v)
+
+
+

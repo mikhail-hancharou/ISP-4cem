@@ -1,8 +1,8 @@
 from modules.SerializeCreate import Creator
 from modules.Serializer import Serializer
-from modules.JsonSerializer import JsonSerializer
+from modules.YAMLSerializer import YamlSerializer
 
 
-class JsonSerializerCreator(Creator):
+class YamlSerializerCreator(Creator):
     def create_serializer(self) -> Serializer:
-        return JsonSerializer()
+        return YamlSerializer()
