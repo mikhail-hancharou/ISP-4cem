@@ -15,7 +15,8 @@ class YamlSerializer(Serializer):
         return ser_obj
 
     def dumps(self, obj):
-        return yaml.dump(ser(obj))
+        yaml_obj = change_tuple_to_list(ser(obj))
+        return yaml.dump(yaml_obj)
 
     def load(self, fp):
         try:
@@ -47,3 +48,12 @@ class YamlSerializer(Serializer):
     def load(self, fp: str, loader=yaml.FullLoader):
         with open(fp, "r") as file:
             return self.loads(file.read(), loader=loader)'''
+
+
+def change_tuple_to_list(obj):
+    for k, v in obj.items():
+        if isinstance(v, dict):
+            obj[k] = change_tuple_to_list(v)
+        if k == "tuple" or k == "list" or k == "bytes":
+            obj[k] = list(v)
+    return obj

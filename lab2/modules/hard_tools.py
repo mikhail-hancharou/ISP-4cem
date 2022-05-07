@@ -64,7 +64,8 @@ def dict_ser(obj):
     temp_dict = dict()
     temp_dict["dict"] = {}
     for k, v in obj.items():
-        for kk, vv in pre_ser(k).items():  # get just one key_type: key_value
+        temp = pre_ser(k)  # bbbbbbrrrrrrrrr
+        for kk, vv in temp.items():  # get just one key_type: key_value
             key = tuple((kk, vv))
             temp_dict["dict"][key] = pre_ser(v)
     return temp_dict

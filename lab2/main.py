@@ -1,5 +1,7 @@
 from modules.JsonSerializer import JsonSerializer
 from modules.hard_tools import ser
+from modules.TOMLSerializer import TomlSerializer
+from modules.YAMLSerializer import YamlSerializer
 from modules.hard_tools import des
 
 
@@ -138,13 +140,13 @@ def main():
     print(dumd)
     print(js.loads(dumd))'''
 
-    print(ser(func))
+    '''print(ser(func))
     dump_f = js.dumps(func)
     print(dump_f)
     des_func = js.loads(dump_f)
-    des_func()
+    des_func()'''
 
-    print(ser(MyClass))
+    '''print(ser(MyClass))
     dump_cl = js.dumps(MyClass)
     print(dump_cl)
     des_class = js.loads(dump_cl)
@@ -162,7 +164,39 @@ def main():
     dump_add = js.dumps(add)
     print(dump_add)
     des_add = js.loads(dump_add)
-    print(des_add(3, 4))
+    print(des_add(3, 4))'''
+
+    ts = TomlSerializer()
+    ym = YamlSerializer()
+    '''d = {"a": 1, "c": 2, "b": 3}
+    print(ser(d))
+    dum = ts.dumps(d)
+    print(dum)
+    print(ts.loads(dum))'''
+
+    d = {"a": {'tuple': ({'int': 1}, {'int': 2})}}
+    dd = {'dict': {('str', 'a'): {'dict': {('str', 'tuple'): {'tuple': [{'int': 1}, {'int': 2}]}}}}}
+    import yaml
+    print(ser(func))
+    dump_f = ym.dumps(func)
+    print(dump_f)
+    des_func = ym.loads(dump_f)
+    des_func()
+
+    print(ser(MyClass))
+    dump_cl = ym.dumps(MyClass)
+    print(dump_cl)
+    des_class = ym.loads(dump_cl)
+    print(des_class.cl(5))
+
+    obj = MyClass()
+    print(ser(obj))
+    dumps_obj = ym.dumps(obj)
+    print(dumps_obj)
+    des_obj = ym.loads(dumps_obj)
+    print(des_obj.br(5))
+    print(des_obj.cl(5))
+
 
 
 if __name__ == '__main__':

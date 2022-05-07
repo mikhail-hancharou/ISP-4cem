@@ -7,10 +7,10 @@ from modules.hard_tools import des
 
 class JsonSerializer(Serializer):
     def dump(self, obj, file: str):
-        json_str = ser_json(ser(obj))
+        json_str = self.dumps(obj)
         try:
             with open(file, 'w') as f:
-                f.write(JsonSerializer.dumps(json_str))
+                f.write(json_str)
         except IOError:
             print('File IO Error')
         return json_str
@@ -19,8 +19,12 @@ class JsonSerializer(Serializer):
         ser_obj = ser(obj)
         return serr_json(ser_obj)
 
-    def load(self, file):
-        pass
+    def load(self, file: str):
+        try:
+            with open(file, 'r') as f:
+                return self.loads(f.read())
+        except IOError:
+            print('File IO Error')
 
     def loads(self, s):
         return des(des_json(s))
@@ -46,7 +50,7 @@ def serr_json(obj) -> str:
         return f"\'{str(obj)}\'"
 
 
-def ser_json(obj, level) -> str:
+'''def ser_json(obj, level) -> str:
     if isinstance(obj, dict):
         start = "{{\n{0}".format(nesting(level))
         end = "\n{0}}}".format(nesting(level))
@@ -58,7 +62,7 @@ def ser_json(obj, level) -> str:
             output = start + ",\n".join(items) + end
         return output
     else:
-        return str(obj)
+        return str(obj)'''
     # else:
     #    return f"\"{str(obj)}\""
 
@@ -112,12 +116,12 @@ def des_dict(s):
     return output
 
 
-def get_minus(value):
+'''def get_minus(value):
     output = 0
     for i in range(len(value) - 1):
         if value[i] == " " and re.fullmatch(r"\d", value[i + 1]):
             output += 2
-    return output
+    return output'''
 
 
 def go_to_value(s):
@@ -153,14 +157,14 @@ def find_key(s):
         return des_json(s)
 
 
-def find_value(s):
+'''def find_value(s):
     let = ""
     if s[0] == "{":
         let = "}"
     elif s[0] == "(":
         pass
     for i in range(len(s)):
-        pass
+        pass'''
 
 
 def find_tuple(s):
@@ -197,6 +201,8 @@ def get_dict_el(s):
 
 TYPES = ["str", "int", "bool", "float", "None"]
 COLL = ["list", "tuple", "bytes"]
+
+
 def get_pair(s):
     output = []
     word, ind = search_for_word(s[0:])
@@ -211,17 +217,13 @@ def get_pair(s):
     return output
 
 
-def find_coll(s):
-    pass
-
-
 def search_for_word(s):
     for i in range(len(s)):
         if s[i] == "\'":
             return s[0:i], i
 
 
-def search_for_tuple(s):
+'''def search_for_tuple(s):
     counter = 1
     for i in range(len(s)):
         if s[i] == ")":
@@ -230,11 +232,10 @@ def search_for_tuple(s):
             else:
                 counter -= 1
         elif s[i] == "(":
-            counter += 1
+            counter += 1'''
 
 
-
-def search_for_value(s):
+'''def search_for_value(s):
     counter = 1
     for i in range(len(s)):
         if s[i] == "}":
@@ -243,9 +244,10 @@ def search_for_value(s):
             else:
                 counter -= 1
         elif s[i] == "{":
-            counter += 1
+            counter += 1'''
 
-def dict_it(s):
+
+'''def dict_it(s):
     output = []
     for i in range(len(s)):
         if s[i] == "\'":
@@ -253,7 +255,7 @@ def dict_it(s):
             s = s[ind + 1:]  # skip '
             output.append(word)
     output = type_check(output[0], output[1])
-    return dict(output)
+    return dict(output)'''
 
 
 def type_check(tp, v):

@@ -16,7 +16,8 @@ class TomlSerializer(Serializer):
         return output
 
     def dumps(self, obj):
-        return toml.dumps(ser(obj))  # pytomlpp
+        toml_obj = change_tuple_to_list(ser(obj))
+        return toml.dumps(toml_obj)  # pytomlpp
 
     def load(self, file):
         try:
@@ -26,5 +27,52 @@ class TomlSerializer(Serializer):
             print('File IO Error')
 
     def loads(self, s):
-        str = toml.loads(s)
-        return des(str)  # pytomlpp
+        s = toml.loads(s)
+        s = from_toml_obj(s)
+        return des(s)  # pytomlpp
+
+
+def from_toml_obj(dc):
+    dic = dc.copy()
+    for k, v in dc.items():
+        key = k
+        if isinstance(k, str) and k[0] == "(":
+            key = str_to_tuple(k)
+            dic[key] = dic.pop(k)
+        if isinstance(v, dict):  # and len(v) != 1
+            dic[key] = from_toml_obj(dic.pop(key))
+        if isinstance(v, list):
+            dic[key] = from_toml_list(dic.pop(key))
+    return dic
+
+
+def str_to_tuple(s):
+    output = list()
+    ls = s.split(", ")
+    for it in ls:
+        el = it
+        el = el.replace('(', "")
+        el = el.replace(')', "")
+        el = el.replace("'", "")
+        output.append(el)
+    return tuple(output)
+
+
+def change_tuple_to_list(obj):
+    for k, v in obj.items():
+        if isinstance(v, dict):
+            obj[k] = change_tuple_to_list(v)
+        if k == "tuple" or k == "list" or k == "bytes":
+            obj[k] = list(v)
+    return obj
+
+
+def from_toml_list(obj):
+    output = list()
+    for it in obj:
+        copy = it
+        if isinstance(it, dict):
+            copy = from_toml_obj(it)
+        output.append(copy)
+    return output
+
