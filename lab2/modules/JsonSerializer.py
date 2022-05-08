@@ -27,6 +27,7 @@ class JsonSerializer(Serializer):
             print('File IO Error')
 
     def loads(self, s):
+        print(des_json(s))
         return des(des_json(s))
 
 
@@ -183,16 +184,22 @@ def find_tuple(s):
                     return tuple(get_pair(st[1:len(st)]))
                 else:
                     return get_dict_el(st)
+            else: count -= 1
 
 
 def get_dict_el(s):
     st = 0
     preout = []
+    count = 0
     for i in range(len(s)):
         if s[i] == "{":
-            st = i
+            count += 1
+            if count == 1:
+                st = i
         elif s[i] == "}":
-            preout.append(s[st:i + 1])
+            count -= 1
+            if count == 0:
+                preout.append(s[st:i + 1])
     output = []
     for i in preout:
         output.append(des_json(i))

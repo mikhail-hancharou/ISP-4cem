@@ -23,7 +23,7 @@ def func():
 
 def decor():
     def beb():
-        print("fff")
+        return "fff"
     return beb
 
 
@@ -74,28 +74,41 @@ def main():
     print(des(sb))'''
 
     # ser func
-    '''sf = ser(func)
+    ''' sf = ser(func)
     print(sf)
     des_func = des(sf)
-    des_func()
+    des_func()'''
 
-    sff = ser(decor)
-    print(sff)
-    des_sff = des(sff)
-    test_f = des_sff()
-    test_f()
+    js = JsonSerializer()
+    '''json = js.dumps(factor)
+    print(json)
+    json = js.loads(json)
+    print(json(4))
 
-    s_factor = ser(factor)
-    test_ff = des(s_factor)
-    print(test_ff(3))
+    ts = TomlSerializer()
+    toml = ts.dumps(factor)
+    # print(toml)
+    toml = ts.loads(toml)
+    print(toml(4))'''
 
-    f = lambda c: c * c
+
+
+    '''f = lambda c: c * c
     slam = ser(f)
     test_lam = des(slam)
     print(test_lam(10))'''
 
     # ser class
-    '''s_cl = ser(MyClass)
+    ym = YamlSerializer()
+    br = ym.dumps(MyClass)
+    br = ym.loads(br)
+    print(br.br(2))
+
+    brr = ym.dumps(Auto)
+    brr = ym.loads(brr)
+    print(br.bruh(2))
+
+    s_cl = ser(MyClass)
     print(s_cl)
     test_cl = des(s_cl)
     print(test_cl.__dict__)
@@ -105,7 +118,7 @@ def main():
     print(test_obj.cl(5))
     print(test_cl.class_v)
     print(MyClass.br(5))
-    print(test_cl.br(5))'''
+    print(test_cl.br(5))
 
     # ser obj
     '''obj = MyClass()
@@ -117,7 +130,6 @@ def main():
     print(test_obj.__dict__)
     print(test_obj.cl(5))'''
 
-    js = JsonSerializer()
     # des types
     '''d = {"a": 1, "c": 2, "b": 3}
     print(ser(d))
@@ -166,7 +178,6 @@ def main():
     des_add = js.loads(dump_add)
     print(des_add(3, 4))'''
 
-    ts = TomlSerializer()
     ym = YamlSerializer()
     '''d = {"a": 1, "c": 2, "b": 3}
     print(ser(d))
@@ -174,7 +185,7 @@ def main():
     print(dum)
     print(ts.loads(dum))'''
 
-    d = {"a": {'tuple': ({'int': 1}, {'int': 2})}}
+    '''d = {"a": {'tuple': ({'int': 1}, {'int': 2})}}
     dd = {'dict': {('str', 'a'): {'dict': {('str', 'tuple'): {'tuple': [{'int': 1}, {'int': 2}]}}}}}
     import yaml
     print(ser(func))
@@ -195,7 +206,7 @@ def main():
     print(dumps_obj)
     des_obj = ym.loads(dumps_obj)
     print(des_obj.br(5))
-    print(des_obj.cl(5))
+    print(des_obj.cl(5))'''
 
 
 

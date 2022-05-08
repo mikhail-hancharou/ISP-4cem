@@ -145,7 +145,7 @@ def glob_variables(func):
         if current_gl in func.__globals__:  # check if they are visible
             if inspect.isfunction(func.__globals__[current_gl]) and func.__globals__[
                 current_gl].__name__ == func.__name__:
-                gl_vars[current_gl] = func
+                gl_vars[current_gl] = str(func)  # str
             else:
                 gl_vars[current_gl] = pre_ser(func.__globals__[current_gl])  # pre_ser(func.__globals__[current_gl])
     return gl_vars
@@ -271,8 +271,11 @@ def des_dict(obj):
 
 
 def des_func(obj):
+    flag = False
     args = obj["__args__"]
     globs = obj["__globals__"]
+    if obj["__name__"] in globs.keys():
+        flag = True
     globs["__builtins__"] = builtins
     for key in obj["__globals__"]:
         if len(args["co_names"]) != 0 and key in des(args["co_names"]):  # list
@@ -308,7 +311,12 @@ def des_func(obj):
                     bytes(args['co_lnotab']),  # , 'raw_unicode_escape'
                     tuple(args['co_freevars']),
                     tuple(args['co_cellvars']))
-    return FunctionType(code, globs)
+    output = FunctionType(code, globs)
+    # print(output.__globals__)
+    if flag:
+        output.__globals__[obj["__name__"]] = output
+    # print(output.__globals__)
+    return output
 
 
 def des_obj(obj):

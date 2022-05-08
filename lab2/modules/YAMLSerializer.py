@@ -16,6 +16,7 @@ class YamlSerializer(Serializer):
 
     def dumps(self, obj):
         yaml_obj = change_tuple_to_list(ser(obj))
+        # yaml = func_convert(yaml_obj)
         return yaml.dump(yaml_obj)
 
     def load(self, fp):
@@ -57,3 +58,9 @@ def change_tuple_to_list(obj):
         if k == "tuple" or k == "list" or k == "bytes":
             obj[k] = list(v)
     return obj
+
+
+'''def func_convert(obj):
+    if "__func__" in obj.keys() and obj["__func__"]["__name__"] in obj["__func__"]["__globals__"].keys():
+        if obj["__name__"] in obj["__globals__"]:
+            flag = True'''

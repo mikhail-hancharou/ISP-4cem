@@ -7,7 +7,7 @@ import toml
 
 class TomlSerializer(Serializer):
     def dump(self, obj, file: str):
-        output = TomlSerializer.dumps(obj)
+        output = self.dumps(obj)
         try:
             with open(file, 'w') as f:
                 f.write(output)
@@ -22,13 +22,14 @@ class TomlSerializer(Serializer):
     def load(self, file):
         try:
             with open(file, 'r') as file:
-                return TomlSerializer.loads(file.read())
+                return self.loads(file.read())
         except IOError:
             print('File IO Error')
 
     def loads(self, s):
         s = toml.loads(s)
         s = from_toml_obj(s)
+        print(s)
         return des(s)  # pytomlpp
 
 
@@ -63,7 +64,13 @@ def change_tuple_to_list(obj):
         if isinstance(v, dict):
             obj[k] = change_tuple_to_list(v)
         if k == "tuple" or k == "list" or k == "bytes":
-            obj[k] = list(v)
+            copy_list = list()
+            for it in list(v):
+                copy_it = it
+                if isinstance(it, dict):
+                    copy_it = change_tuple_to_list(it)
+                copy_list.append(copy_it)
+            obj[k] = copy_list
     return obj
 
 
