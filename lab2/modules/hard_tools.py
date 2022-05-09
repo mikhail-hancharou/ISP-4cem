@@ -1,9 +1,5 @@
 import builtins
-import codecs
-import dis
 import inspect
-import opcode
-import re
 from types import FunctionType, CodeType, LambdaType
 
 
@@ -19,7 +15,7 @@ def pre_ser(obj):
     elif isinstance(obj, dict):
         return dict_ser(obj)
     elif inspect.iscode(obj):
-        return ser_func(FunctionType(obj, {}))  # serialize_code(obj)
+        return ser_func(FunctionType(obj, {}))
     elif inspect.isfunction(obj) or inspect.ismethod(obj) or isinstance(obj, LambdaType):
         return ser_func(obj)
     elif inspect.isclass(obj):
@@ -71,7 +67,7 @@ def dict_ser(obj):
     return temp_dict
 
 
-def serialize_code(obj):
+'''def serialize_code(obj):
     main_key = "code"
     ans = dict()
     ans[main_key] = {}
@@ -84,7 +80,7 @@ def serialize_code(obj):
         ans[main_key][ser(i[0])] = ser(i[1])
     ans[main_key] = tuple((k, ans[main_key][k]) for k in ans[main_key])
 
-    return ans
+    return ans'''
 
 
 '''def serialize_function(obj):
@@ -128,11 +124,11 @@ def serialize_code(obj):
     return ans'''
 
 
-def nesting(level: int) -> str:
+'''def nesting(level: int) -> str:
     result = ""
     for i in range(level):
         result += "\t"
-    return result
+    return result'''
 
 
 def serialize_prop(obj):
@@ -143,8 +139,7 @@ def glob_variables(func):
     gl_vars = {}
     for current_gl in func.__code__.co_names:  # search in used global variables
         if current_gl in func.__globals__:  # check if they are visible
-            if inspect.isfunction(func.__globals__[current_gl]) and func.__globals__[
-                current_gl].__name__ == func.__name__:
+            if inspect.isfunction(func.__globals__[current_gl]) and func.__globals__[current_gl].__name__ == func.__name__:
                 gl_vars[current_gl] = str(func)  # str
             else:
                 gl_vars[current_gl] = pre_ser(func.__globals__[current_gl])  # pre_ser(func.__globals__[current_gl])
@@ -273,6 +268,8 @@ def des_dict(obj):
 def des_func(obj):
     flag = False
     args = obj["__args__"]
+    if "__globals__" not in obj.keys():
+        obj["__globals__"] = {}
     globs = obj["__globals__"]
     if obj["__name__"] in globs.keys():
         flag = True
@@ -370,10 +367,10 @@ def des_class(obj):
     # for attr, val in obj.items():
     #    if attr != "__name__":
     #        dct[attr] = des(val)
-    return type(obj["__name__"], (), dct)
+    # return type(obj["__name__"], (), dct)
 
 
-def serialize_instance(instance_obj):
+'''def serialize_instance(instance_obj):
     ans = dict()
     type = re.search(r"\'(\w+)\'", str(type(instance_obj))).group(1)
     ans[type] = {}
@@ -385,5 +382,5 @@ def serialize_instance(instance_obj):
         ans[type][key] = val
     ans[type] = tuple((k, ans[type][k]) for k in ans[type])
 
-    return ans
+    return ans'''
 

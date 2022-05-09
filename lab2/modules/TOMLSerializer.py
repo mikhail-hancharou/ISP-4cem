@@ -1,23 +1,22 @@
 from modules.Serializer import Serializer
 from modules.hard_tools import ser
 from modules.hard_tools import des
-# import pytomlpp
 import toml
 
 
 class TomlSerializer(Serializer):
     def dump(self, obj, file: str):
         output = self.dumps(obj)
-        try:
-            with open(file, 'w') as f:
-                f.write(output)
-        except IOError:
-            print('File IO Error')
-        return output
+        #try:
+        with open(file, 'w') as f:
+            f.write(output)
+        # except IOError:
+        #    print('File IO Error')
+        # return output
 
     def dumps(self, obj):
         toml_obj = change_tuple_to_list(ser(obj))
-        return toml.dumps(toml_obj)  # pytomlpp
+        return toml.dumps(toml_obj)
 
     def load(self, file):
         try:
@@ -30,7 +29,7 @@ class TomlSerializer(Serializer):
         s = toml.loads(s)
         s = from_toml_obj(s)
         print(s)
-        return des(s)  # pytomlpp
+        return des(s)
 
 
 def from_toml_obj(dc):

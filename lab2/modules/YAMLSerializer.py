@@ -56,7 +56,10 @@ def change_tuple_to_list(obj):
         if isinstance(v, dict):
             obj[k] = change_tuple_to_list(v)
         if k == "tuple" or k == "list" or k == "bytes":
-            obj[k] = list(v)
+            copy = []
+            for it in list(v):
+                copy.append(change_tuple_to_list(it))
+            obj[k] = copy
     return obj
 
 

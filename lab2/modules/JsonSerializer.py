@@ -1,5 +1,3 @@
-import re
-
 from modules.Serializer import Serializer
 from modules.hard_tools import ser
 from modules.hard_tools import des
@@ -13,7 +11,7 @@ class JsonSerializer(Serializer):
                 f.write(json_str)
         except IOError:
             print('File IO Error')
-        return json_str
+        # return json_str
 
     def dumps(self, obj):
         ser_obj = ser(obj)
@@ -29,13 +27,6 @@ class JsonSerializer(Serializer):
     def loads(self, s):
         print(des_json(s))
         return des(des_json(s))
-
-
-def nesting(level) -> str:
-    output = ""
-    for i in range(level):
-        output += "\t"
-    return output
 
 
 def serr_json(obj) -> str:

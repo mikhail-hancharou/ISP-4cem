@@ -1,4 +1,5 @@
 from modules.JsonSerializer import JsonSerializer
+from modules.SerFactory import ParserFactory
 from modules.hard_tools import ser
 from modules.TOMLSerializer import TomlSerializer
 from modules.YAMLSerializer import YamlSerializer
@@ -25,6 +26,11 @@ def decor():
     def beb():
         return "fff"
     return beb
+
+def outer_func():
+    def inner_func():
+        return "Hello, World!"
+    inner_func()
 
 
 def factor(f):
@@ -79,13 +85,39 @@ def main():
     des_func = des(sf)
     des_func()'''
 
-    js = JsonSerializer()
-    '''json = js.dumps(factor)
-    print(json)
-    json = js.loads(json)
-    print(json(4))
+    listt = [1, 2, 3, 4, 'abcd']
+    dictt = {'a': (1, 2, 3), 'b': {'c': listt}}
+    # encoder.py toml
+    ym = YamlSerializer()
+    one = ym.dumps(dictt)
+    one = ym.loads(one)
+    format = {"json": "test_json.json", "toml": "test_toml.toml", "yaml": "test_yaml.yaml"}
+    for val in format.keys():
+        parser = ParserFactory.create_parser(val)
+        in_format = parser.dumps(decor)
+        print(in_format)
+        in_python = parser.loads(in_format)
+        test_func = in_python()
+        real_func = decor()
 
-    ts = TomlSerializer()
+    v = "error.txt"
+    for k in format.keys():
+        parser = ParserFactory.create_parser(k)
+        parser.dump(add, v)
+
+    js = JsonSerializer()
+    json = js.dumps(decor)
+    print(json)
+    tt = ser(decor)
+    tt = des(tt)
+    print(tt())
+    ttt = tt()
+    print(ttt())
+    json = js.loads(json)
+    t = json()
+    print(t())
+
+    '''ts = TomlSerializer()
     toml = ts.dumps(factor)
     # print(toml)
     toml = ts.loads(toml)
@@ -103,10 +135,6 @@ def main():
     br = ym.dumps(MyClass)
     br = ym.loads(br)
     print(br.br(2))
-
-    brr = ym.dumps(Auto)
-    brr = ym.loads(brr)
-    print(br.bruh(2))
 
     s_cl = ser(MyClass)
     print(s_cl)
