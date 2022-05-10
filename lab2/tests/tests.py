@@ -13,7 +13,7 @@ def factor(f):
         return f
 
 
-mul = lambda x, y: x * y
+mul = lambda c, y: c * y
 
 
 def decor():
@@ -86,6 +86,13 @@ class TestFunc(unittest.TestCase):
             #    pass
             # self.assertRaises(IOError, parser.dump(add, v))
 
+    def test_lambda(self):
+        for val in self.format.keys():
+            parser = ParserFactory.create_parser(val)
+            in_format = parser.dumps(mul)
+            in_python = parser.loads(in_format)
+            self.assertEqual(in_python(4, 3), mul(4, 3))
+
 
 class TestClass(unittest.TestCase):
     format = {"json": "test_json.json", "toml": "test_toml.toml", "yaml": "test_yaml.yaml"}
@@ -124,7 +131,7 @@ class TestObj(unittest.TestCase):
 
 
 class TestTypes(unittest.TestCase):
-    format = {"json": "test_json.json", "toml": "test_toml.toml"}
+    format = {"json": "test_json.json", "toml": "test_toml.toml", "yaml": "test_yaml.yaml"}
 
     list = [1, 2, 3, 4, 'abcd']
     tuple = (34, list, dict)

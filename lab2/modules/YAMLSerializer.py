@@ -32,6 +32,7 @@ class YamlSerializer(Serializer):
         obj = dict()
         try:
             obj = yaml.safe_load(s)
+            obj = change_key_from_not_tuple(obj)
         except yaml.YAMLError as exc:
             print(exc)
         return des(obj)
@@ -51,16 +52,57 @@ class YamlSerializer(Serializer):
             return self.loads(file.read(), loader=loader)'''
 
 
+TYPES = ["list", "tuple", "bytes", "dict",
+         'co_argcount',
+         'co_posonlyargcount',
+         'co_kwonlyargcount',
+         'co_nlocals',
+         'co_stacksize',
+         'co_flags',
+         'co_code',
+         'co_consts',
+         'co_names',
+         'co_varnames',
+         'co_filename',
+         'co_name',
+         'co_firstlineno',
+         'co_lnotab',
+         'co_freevars',
+         'co_cellvars',
+         '__name__',
+         '__globals__',
+         '__func__',
+         '__args__',
+         '__builtins__',
+         '__class__',
+         '__object__']
+
+
+def change_key_from_not_tuple(obj, flag=False):
+    dc = obj.copy()
+    for k, v in obj.items():
+        copy = k
+        if k not in TYPES and flag:
+            copy = [(k, v) for k, v in ser(k).items()][0]
+            dc[copy] = dc.pop(k)
+        if isinstance(v, dict):
+            dc[copy] = change_key_from_not_tuple(v, k == "dict")
+    return dc
+
+
 def change_tuple_to_list(obj):
+    dt = obj.copy()
     for k, v in obj.items():
         if isinstance(v, dict):
-            obj[k] = change_tuple_to_list(v)
+            dt[k] = change_tuple_to_list(v)
         if k == "tuple" or k == "list" or k == "bytes":
             copy = []
             for it in list(v):
                 copy.append(change_tuple_to_list(it))
-            obj[k] = copy
-    return obj
+            dt[k] = copy
+        if isinstance(k, tuple):
+            dt[k[1]] = dt.pop(k)
+    return dt
 
 
 '''def func_convert(obj):

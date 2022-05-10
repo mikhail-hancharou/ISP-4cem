@@ -91,19 +91,11 @@ def main():
     ym = YamlSerializer()
     one = ym.dumps(dictt)
     one = ym.loads(one)
-    format = {"json": "test_json.json", "toml": "test_toml.toml", "yaml": "test_yaml.yaml"}
-    for val in format.keys():
-        parser = ParserFactory.create_parser(val)
-        in_format = parser.dumps(decor)
-        print(in_format)
-        in_python = parser.loads(in_format)
-        test_func = in_python()
-        real_func = decor()
 
-    v = "error.txt"
-    for k in format.keys():
-        parser = ParserFactory.create_parser(k)
-        parser.dump(add, v)
+    in_format = ym.dumps(factor)
+    in_python = ym.loads(in_format)
+    parsed = in_python
+    real = factor
 
     js = JsonSerializer()
     json = js.dumps(decor)
@@ -135,6 +127,11 @@ def main():
     br = ym.dumps(MyClass)
     br = ym.loads(br)
     print(br.br(2))
+
+    in_format = ym.dumps(factor)
+    in_python = ym.loads(in_format)
+    parsed = in_python
+    real = factor
 
     s_cl = ser(MyClass)
     print(s_cl)
@@ -235,7 +232,6 @@ def main():
     des_obj = ym.loads(dumps_obj)
     print(des_obj.br(5))
     print(des_obj.cl(5))'''
-
 
 
 if __name__ == '__main__':
