@@ -88,6 +88,33 @@ def main():
     listt = [1, 2, 3, 4, 'abcd']
     dictt = {'a': (1, 2, 3), 'b': {'c': listt}}
     # encoder.py toml
+    '''    def dump_sections(self, o, sup):
+        retstr = ""
+        if sup != "" and sup[-1] != ".":
+            sup += '.'
+        retdict = self._dict()
+        arraystr = ""
+        """ for section in o:
+            qsection = section
+            if not re.match(r'^[A-Za-z0-9_-]+$', section):
+                qsection = _dump_str(section)
+            if not isinstance(o[section], dict):
+                arrayoftables = False
+                if isinstance(o[section], list):
+                    for a in o[section]:
+                        if isinstance(a, dict):
+                            arrayoftables = True"""
+        for section in o:
+            string_repres = unicode(section)  ## MyEdit
+            qsection = section
+            if not re.match(r'^[A-Za-z0-9_-]+$', string_repres):
+                qsection = _dump_str(string_repres)
+            if not isinstance(o[section], dict):
+                arrayoftables = False
+                if isinstance(o[section], list):
+                    for a in o[section]:
+                        if isinstance(a, dict):
+                            arrayoftables = True'''
     ym = YamlSerializer()
     one = ym.dumps(dictt)
     one = ym.loads(one)
