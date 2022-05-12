@@ -8,9 +8,9 @@ def ser(obj):  # serialize
 
 
 def pre_ser(obj):
-    if isinstance(obj, int | float | str | bool | type(None)):
+    if isinstance(obj, (int, float, str, bool, type(None))):
         return basic_type_ser(obj)
-    elif isinstance(obj, list | tuple | bytes):
+    elif isinstance(obj, (list, tuple, bytes)):
         return tl_ser(obj)
     elif isinstance(obj, dict):
         return dict_ser(obj)

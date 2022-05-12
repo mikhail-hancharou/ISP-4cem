@@ -2,8 +2,8 @@ import unittest
 from modules.SerFactory import ParserFactory
 
 
-def add(x, y):
-    return x + y
+def add(c, y):
+    return c + y
 
 
 def factor(f):
@@ -19,6 +19,7 @@ mul = lambda c, y: c * y
 def decor():
     def beb():
         return "fff"
+
     return beb
 
 
@@ -37,6 +38,13 @@ class MyClass:
     @staticmethod
     def br(y):
         return y * y
+
+
+class MyCl(MyClass):
+    class_b = 11
+
+    def bruh(self):
+        print(f"OH MY GOD {self.class_b}")
 
 
 my_obj = MyClass()
@@ -110,6 +118,15 @@ class TestClass(unittest.TestCase):
             in_format = parser.dump(MyClass, v)
             in_python = parser.load(v)
             self.assertEqual(in_python.br(1), MyClass.br(1))
+
+    def test_inheritage(self):
+        for val in self.format.keys():
+            parser = ParserFactory.create_parser(val)
+            in_format = parser.dumps(MyCl)
+            in_python = parser.loads(in_format)
+            obj = in_python()
+            self.assertEqual(obj.bruh(), obj.bruh())
+            self.assertEqual(in_python.br(15), MyCl.br(15))
 
 
 class TestObj(unittest.TestCase):

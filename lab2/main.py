@@ -5,6 +5,7 @@ from modules.TOMLSerializer import TomlSerializer
 from modules.YAMLSerializer import YamlSerializer
 from modules.hard_tools import des
 import sys
+from Converter.Converter import setup
 
 x = 50
 
@@ -57,6 +58,12 @@ class MyClass:
     @staticmethod
     def br(y):
         return y * y
+
+
+class MyCl(MyClass):
+    class_b = 11
+    def bruh(self):
+        print(f"gfds {self.class_b}")
 
 
 def main():
@@ -117,6 +124,12 @@ def main():
                     for a in o[section]:
                         if isinstance(a, dict):
                             arrayoftables = True'''
+    js = JsonSerializer()
+    one = js.dumps(MyCl)
+    one = js.loads(one)
+    obj = one()
+    one.bruh()
+    print(one.br(2))
     ym = YamlSerializer()
     one = ym.dumps(dictt)
     one = ym.loads(one)

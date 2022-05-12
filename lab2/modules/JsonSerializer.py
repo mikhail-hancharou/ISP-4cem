@@ -6,16 +6,12 @@ from modules.hard_tools import des
 class JsonSerializer(Serializer):
     def dump(self, obj, file: str):
         json_str = self.dumps(obj)
-        try:
-            with open(file, 'w') as f:
-                f.write(json_str)
-        except IOError:
-            print('File IO Error')
-        # return json_str
+        with open(file, 'w') as f:
+            f.write(json_str)
 
     def dumps(self, obj):
         ser_obj = ser(obj)
-        return serr_json(ser_obj)
+        return ser_json(ser_obj)
 
     def load(self, file: str):
         try:
@@ -29,34 +25,17 @@ class JsonSerializer(Serializer):
         return des(des_json(s))
 
 
-def serr_json(obj) -> str:
+def ser_json(obj) -> str:
     if type(obj) == dict:
         serialized = []
         for k, v in obj.items():
-            serialized.append(f"{serr_json(k)}: {serr_json(v)}")
+            serialized.append(f"{ser_json(k)}: {ser_json(v)}")
         ans = ", ".join(serialized)
         return f"{{{ans}}}"
     elif type(obj) == tuple or type(obj) == int:
         return str(obj)
     else:
         return f"\'{str(obj)}\'"
-
-
-'''def ser_json(obj, level) -> str:
-    if isinstance(obj, dict):
-        start = "{{\n{0}".format(nesting(level))
-        end = "\n{0}}}".format(nesting(level))
-        output = ""
-        items = []
-        for k, v in obj.items():
-            vv = ser_json(v, level + 1)
-            items.append(nesting(level + 1) + str(k) + ": " + vv)
-            output = start + ",\n".join(items) + end
-        return output
-    else:
-        return str(obj)'''
-    # else:
-    #    return f"\"{str(obj)}\""
 
 
 def des_json(s: str):
@@ -98,22 +77,14 @@ def des_dict(s):
         if key in TYPES:
             value = type_check(key, value)
         output[key] = value
-        if isinstance(value, str | tuple | dict | list):
+        if isinstance(value, (str, tuple, dict, list)):
             strr = str(value)
             strr = strr.replace("\\\\", "\\")
-            s = s[len(strr):]  # + get_minus((str(value)))
+            s = s[len(strr):]
         s = go_to_next_key(s)
         if len(s) <= 2:
             break
     return output
-
-
-'''def get_minus(value):
-    output = 0
-    for i in range(len(value) - 1):
-        if value[i] == " " and re.fullmatch(r"\d", value[i + 1]):
-            output += 2
-    return output'''
 
 
 def go_to_value(s):
@@ -149,16 +120,6 @@ def find_key(s):
         return des_json(s)
 
 
-'''def find_value(s):
-    let = ""
-    if s[0] == "{":
-        let = "}"
-    elif s[0] == "(":
-        pass
-    for i in range(len(s)):
-        pass'''
-
-
 def find_tuple(s):
     st = ""
     output = []
@@ -169,13 +130,14 @@ def find_tuple(s):
         elif s[i] == ")":
             if count == 1:
                 st = s[:i]
-                if (len(st) == 0):
+                if len(st) == 0:
                     return tuple()
                 elif st[0] == "\'":
                     return tuple(get_pair(st[1:len(st)]))
                 else:
                     return get_dict_el(st)
-            else: count -= 1
+            else:
+                count -= 1
 
 
 def get_dict_el(s):
@@ -221,41 +183,6 @@ def search_for_word(s):
             return s[0:i], i
 
 
-'''def search_for_tuple(s):
-    counter = 1
-    for i in range(len(s)):
-        if s[i] == ")":
-            if counter == 1:
-                return s[0:i], i + 1
-            else:
-                counter -= 1
-        elif s[i] == "(":
-            counter += 1'''
-
-
-'''def search_for_value(s):
-    counter = 1
-    for i in range(len(s)):
-        if s[i] == "}":
-            if counter == 1:
-                return s[0:i], i + 1
-            else:
-                counter -= 1
-        elif s[i] == "{":
-            counter += 1'''
-
-
-'''def dict_it(s):
-    output = []
-    for i in range(len(s)):
-        if s[i] == "\'":
-            word, ind = search_for_word(s[0:i+1])
-            s = s[ind + 1:]  # skip '
-            output.append(word)
-    output = type_check(output[0], output[1])
-    return dict(output)'''
-
-
 def type_check(tp, v):
     if tp == "int":
         return int(v)
@@ -269,6 +196,3 @@ def type_check(tp, v):
         return v
     else:
         return des_json(v)
-
-
-

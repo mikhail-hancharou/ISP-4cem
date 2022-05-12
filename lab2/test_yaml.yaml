@@ -21,21 +21,15 @@ __object__:
             list:
             - None: null
           co_filename:
-            str: C:\Users\engen\Desktop\4ctv\ISP\lab2\tests\tests.py
+            str: /home/mikhail/repositories/isp-4cem/ISP-4cem/lab2/tests/tests.py
           co_firstlineno:
-            int: 37
+            int: 38
           co_flags:
             int: 67
           co_freevars:
             list: []
           co_kwonlyargcount:
             int: 0
-          co_lines:
-            str: <built-in method co_lines of code object at 0x0000012AEC196CE0>
-          co_linetable:
-            bytes:
-            - int: 8
-            - int: 2
           co_lnotab:
             bytes:
             - int: 0
@@ -82,21 +76,15 @@ __object__:
             list:
             - None: null
           co_filename:
-            str: C:\Users\engen\Desktop\4ctv\ISP\lab2\tests\tests.py
+            str: /home/mikhail/repositories/isp-4cem/ISP-4cem/lab2/tests/tests.py
           co_firstlineno:
-            int: 34
+            int: 35
           co_flags:
             int: 67
           co_freevars:
             list: []
           co_kwonlyargcount:
             int: 0
-          co_lines:
-            str: <built-in method co_lines of code object at 0x0000012AEC196C30>
-          co_linetable:
-            bytes:
-            - int: 14
-            - int: 1
           co_lnotab:
             bytes:
             - int: 0

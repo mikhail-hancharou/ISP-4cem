@@ -1,22 +1,22 @@
 from setuptools import find_packages, setup
 
 setup(
-    name="Lab2",
-    version="2.0",
-    packages=find_packages(include=['modules', 'modules.*']),
+    name="hardser",
+    version="0.0.0.6",
+    author="Mikhail Hancharou",
+    author_email="engeneer2003@mail.ru",
+    packages=['modules', 'Converter'],
     entry_points={
         'console_scripts': [
-            'Serializer=Converter:setup',  # modules.converter:setup
+            'hardser=Converter.Converter:setup',
         ],
     },
     install_requires=[
-        'coverage==5.5',
+        'coverage==6.3.2',
         'entrypoints==0.3',
-        'py==1.10.0',
-        'pytest==6.2.3',
-        'pytest-cov==2.11.1',
-        'python-apt==2.0.0+ubuntu0.20.4.4',
-        'PyYAML==5.4.1',
+        'pytest==7.1.2',
+        'pytest-cov==3.0.0',
+        'PyYAML==5.3.1',
         'simplejson==3.16.0',
         'toml==0.10.2',
         'virtualenv==20.0.17',
