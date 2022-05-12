@@ -4,7 +4,7 @@ from modules.hard_tools import ser
 from modules.TOMLSerializer import TomlSerializer
 from modules.YAMLSerializer import YamlSerializer
 from modules.hard_tools import des
-
+import sys
 
 x = 50
 
@@ -26,6 +26,7 @@ def decor():
     def beb():
         return "fff"
     return beb
+
 
 def outer_func():
     def inner_func():
@@ -84,6 +85,7 @@ def main():
     print(sf)
     des_func = des(sf)
     des_func()'''
+    print(sys.path)
 
     listt = [1, 2, 3, 4, 'abcd']
     dictt = {'a': (1, 2, 3), 'b': {'c': listt}}

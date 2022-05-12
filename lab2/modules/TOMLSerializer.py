@@ -1,3 +1,6 @@
+import re
+import sys
+from toml.decoder import InlineTableDict
 from modules.Serializer import Serializer
 from modules.hard_tools import ser
 from modules.hard_tools import des
@@ -5,14 +8,13 @@ import toml
 
 
 class TomlSerializer(Serializer):
+    def __init__(self):
+        toml.TomlEncoder.dump_sections = my_dump_sections
+
     def dump(self, obj, file: str):
         output = self.dumps(obj)
-        #try:
         with open(file, 'w') as f:
             f.write(output)
-        # except IOError:
-        #    print('File IO Error')
-        # return output
 
     def dumps(self, obj):
         toml_obj = change_tuple_to_list(ser(obj))
@@ -81,4 +83,91 @@ def from_toml_list(obj):
             copy = from_toml_obj(it)
         output.append(copy)
     return output
+
+
+def my_dump_sections(self, o, sup):
+    unicode = str
+    retstr = ""
+    if sup != "" and sup[-1] != ".":
+        sup += '.'
+    retdict = self._dict()
+    arraystr = ""
+    for section in o:
+        string_repres = unicode(section)  ## MyEdit
+        qsection = section
+        if not re.match(r'^[A-Za-z0-9_-]+$', string_repres):
+            qsection = dump_str(string_repres)
+        if not isinstance(o[section], dict):
+            arrayoftables = False
+            if isinstance(o[section], list):
+                for a in o[section]:
+                    if isinstance(a, dict):
+                        arrayoftables = True
+            if arrayoftables:
+                for a in o[section]:
+                    arraytabstr = "\n"
+                    arraystr += "[[" + sup + qsection + "]]\n"
+                    s, d = self.dump_sections(a, sup + qsection)
+                    if s:
+                        if s[0] == "[":
+                            arraytabstr += s
+                        else:
+                            arraystr += s
+                    while d:
+                        newd = self._dict()
+                        for dsec in d:
+                            s1, d1 = self.dump_sections(d[dsec], sup +
+                                                        qsection + "." +
+                                                        dsec)
+                            if s1:
+                                arraytabstr += ("[" + sup + qsection +
+                                                "." + dsec + "]\n")
+                                arraytabstr += s1
+                            for s1 in d1:
+                                newd[dsec + "." + s1] = d1[s1]
+                        d = newd
+                    arraystr += arraytabstr
+            else:
+                if o[section] is not None:
+                    retstr += (qsection + " = " +
+                               unicode(self.dump_value(o[section])) + '\n')
+        elif self.preserve and isinstance(o[section], InlineTableDict):
+            retstr += (qsection + " = " +
+                       self.dump_inline_table(o[section]))
+        else:
+            retdict[qsection] = o[section]
+    retstr += arraystr
+    return (retstr, retdict)
+
+
+def dump_str(v):
+    unicode = str
+    if sys.version_info < (3,) and hasattr(v, 'decode') and isinstance(v, str):
+        v = v.decode('utf-8')
+    v = "%r" % v
+    if v[0] == 'u':
+        v = v[1:]
+    singlequote = v.startswith("'")
+    if singlequote or v.startswith('"'):
+        v = v[1:-1]
+    if singlequote:
+        v = v.replace("\\'", "'")
+        v = v.replace('"', '\\"')
+    v = v.split("\\x")
+    while len(v) > 1:
+        i = -1
+        if not v[0]:
+            v = v[1:]
+        v[0] = v[0].replace("\\\\", "\\")
+        # No, I don't know why != works and == breaks
+        joinx = v[0][i] != "\\"
+        while v[0][:i] and v[0][i] == "\\":
+            joinx = not joinx
+            i -= 1
+        if joinx:
+            joiner = "x"
+        else:
+            joiner = "u00"
+        v = [v[0] + joiner + v[1]] + v[2:]
+    return unicode('"' + v[0] + '"')
 

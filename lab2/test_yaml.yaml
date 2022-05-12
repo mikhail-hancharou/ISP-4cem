@@ -31,7 +31,7 @@ __object__:
           co_kwonlyargcount:
             int: 0
           co_lines:
-            str: <built-in method co_lines of code object at 0x0000015808806C30>
+            str: <built-in method co_lines of code object at 0x0000012AEC196CE0>
           co_linetable:
             bytes:
             - int: 8
@@ -92,7 +92,7 @@ __object__:
           co_kwonlyargcount:
             int: 0
           co_lines:
-            str: <built-in method co_lines of code object at 0x0000015808806B80>
+            str: <built-in method co_lines of code object at 0x0000012AEC196C30>
           co_linetable:
             bytes:
             - int: 14
