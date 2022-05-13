@@ -155,7 +155,7 @@ def glob_variables(func):
 #       }
 # }
 def ser_func(obj):
-    if inspect.ismethod(obj):  # TODO
+    if inspect.ismethod(obj):
         obj = obj.__func__
     output = dict()
     args = dict()

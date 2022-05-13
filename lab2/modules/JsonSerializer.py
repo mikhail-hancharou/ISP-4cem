@@ -21,7 +21,7 @@ class JsonSerializer(Serializer):
             print('File IO Error')
 
     def loads(self, s):
-        print(des_json(s))
+        # print(des_json(s))
         return des(des_json(s))
 
 

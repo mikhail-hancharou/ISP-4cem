@@ -1,15 +1,13 @@
-from setuptools import find_packages, setup
+from setuptools import setup
 
 setup(
     name="hardser",
-    version="0.0.0.6",
+    version="0.0.1.7",
     author="Mikhail Hancharou",
     author_email="engeneer2003@mail.ru",
     packages=['modules', 'Converter'],
     entry_points={
-        'console_scripts': [
-            'hardser=Converter.Converter:setup',
-        ],
+        'console_scripts': ['hardser=Converter.Converter:setup'],
     },
     install_requires=[
         'coverage==6.3.2',

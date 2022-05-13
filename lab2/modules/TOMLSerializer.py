@@ -30,7 +30,7 @@ class TomlSerializer(Serializer):
     def loads(self, s):
         s = toml.loads(s)
         s = from_toml_obj(s)
-        print(s)
+        # print(s)
         return des(s)
 
 

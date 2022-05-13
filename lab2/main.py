@@ -1,3 +1,5 @@
+import re
+
 from modules.JsonSerializer import JsonSerializer
 from modules.SerFactory import ParserFactory
 from modules.hard_tools import ser
@@ -26,12 +28,14 @@ def func():
 def decor():
     def beb():
         return "fff"
+
     return beb
 
 
 def outer_func():
     def inner_func():
         return "Hello, World!"
+
     inner_func()
 
 
@@ -62,8 +66,16 @@ class MyClass:
 
 class MyCl(MyClass):
     class_b = 11
+
     def bruh(self):
         print(f"gfds {self.class_b}")
+
+
+class MyCl2(MyCl):
+    class_c = 100
+
+    def brew(self):
+        print(f"gfds {self.class_v}")
 
 
 def main():
@@ -92,7 +104,21 @@ def main():
     print(sf)
     des_func = des(sf)
     des_func()'''
-    print(sys.path)
+
+    cr = re.findall(r"\w+", "source=toml")
+    print(cr)
+    (key, value) = re.findall(r"\w+", "source=toml")
+    dict = {}
+    dict[key] = value
+    js = JsonSerializer()
+    one = js.dumps(MyCl2)
+    one = js.loads(one)
+    jbj = one()
+    jbj.brew()
+    c = 15
+    print(one.br(c))
+    print(jbj.class_b)
+
 
     listt = [1, 2, 3, 4, 'abcd']
     dictt = {'a': (1, 2, 3), 'b': {'c': listt}}
@@ -125,10 +151,10 @@ def main():
                         if isinstance(a, dict):
                             arrayoftables = True'''
     js = JsonSerializer()
-    one = js.dumps(MyCl)
+    one = js.dumps(MyClass)
     one = js.loads(one)
     obj = one()
-    one.bruh()
+    # obj.bruh()
     print(one.br(2))
     ym = YamlSerializer()
     one = ym.dumps(dictt)
@@ -156,8 +182,6 @@ def main():
     # print(toml)
     toml = ts.loads(toml)
     print(toml(4))'''
-
-
 
     '''f = lambda c: c * c
     slam = ser(f)

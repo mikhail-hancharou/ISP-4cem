@@ -30,6 +30,12 @@ __object__:
             list: []
           co_kwonlyargcount:
             int: 0
+          co_lines:
+            str: <built-in method co_lines of code object at 0x7fd159c42130>
+          co_linetable:
+            bytes:
+            - int: 8
+            - int: 2
           co_lnotab:
             bytes:
             - int: 0
@@ -85,6 +91,12 @@ __object__:
             list: []
           co_kwonlyargcount:
             int: 0
+          co_lines:
+            str: <built-in method co_lines of code object at 0x7fd159c42080>
+          co_linetable:
+            bytes:
+            - int: 14
+            - int: 1
           co_lnotab:
             bytes:
             - int: 0

@@ -12,6 +12,9 @@ __name__ = "cl"
 
 [__object__.__attrs__.br.__func__.__globals__]
 
+[__object__.__attrs__.br.__func__.__args__.co_lines]
+str = "<built-in method co_lines of code object at 0x7fd159c42130>"
+
 [__object__.__attrs__.br.__func__.__args__.co_argcount]
 int = 1
 
@@ -80,6 +83,13 @@ str = "br"
 [__object__.__attrs__.br.__func__.__args__.co_firstlineno]
 int = 38
 
+[__object__.__attrs__.br.__func__.__args__.co_linetable]
+[[__object__.__attrs__.br.__func__.__args__.co_linetable.bytes]]
+int = 8
+
+[[__object__.__attrs__.br.__func__.__args__.co_linetable.bytes]]
+int = 2
+
 [__object__.__attrs__.br.__func__.__args__.co_lnotab]
 [[__object__.__attrs__.br.__func__.__args__.co_lnotab.bytes]]
 int = 0
@@ -89,6 +99,9 @@ int = 2
 
 [__object__.__attrs__.cl.__func__.__globals__.x]
 int = 50
+
+[__object__.__attrs__.cl.__func__.__args__.co_lines]
+str = "<built-in method co_lines of code object at 0x7fd159c42080>"
 
 [__object__.__attrs__.cl.__func__.__args__.co_argcount]
 int = 2
@@ -182,6 +195,13 @@ str = "cl"
 
 [__object__.__attrs__.cl.__func__.__args__.co_firstlineno]
 int = 35
+
+[__object__.__attrs__.cl.__func__.__args__.co_linetable]
+[[__object__.__attrs__.cl.__func__.__args__.co_linetable.bytes]]
+int = 14
+
+[[__object__.__attrs__.cl.__func__.__args__.co_linetable.bytes]]
+int = 1
 
 [__object__.__attrs__.cl.__func__.__args__.co_lnotab]
 [[__object__.__attrs__.cl.__func__.__args__.co_lnotab.bytes]]
