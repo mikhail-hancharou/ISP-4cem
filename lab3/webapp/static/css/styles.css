@@ -1,0 +1,39 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap');
+
+header {
+    padding-left: 200px;
+    padding-right: 200px;
+    padding-top: 15px;
+}
+
+.navbar-expand-lg {
+    background-color: lavender;
+    font-family: 'Playfair Display', serif;
+}
+
+.container-xxl {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+#main-letter {
+    font-size: 35px;
+}
+
+.main-name {
+    font-size: 30px;
+}
+
+.navbar-nav a {
+    font-size: 25px;
+    padding-top: 15px;
+}
+
+#main-style {
+    font-family: 'Playfair Display', serif;
+    font-size: 25px;
+     white-space: normal;
+}
+
+
+

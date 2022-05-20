@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Blog</title>
+    <h1>OMG THAT IS BLOG</h1>
+</head>
+<body>
+    <p1>Blog body</p1>
+    <ul>Blog body</ul>
+</body>
+<aside style="position: absolute; right: 350px; padding: 10px;">
+        <h2 class="categories">Categories:</h2>
+            <ul class="list-group">
+                {% for category in all_categories %}
+                    <a href="{% url 'posts_by_category' category.title %}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-link"></i>
+                        {{ category }}
+                    </a>
+                {% empty %}
+                     <p class="category">- No categories</p>
+                {% endfor %}
+            </ul>
+    </aside>
+</html>
