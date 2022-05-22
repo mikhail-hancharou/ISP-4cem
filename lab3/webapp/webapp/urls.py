@@ -22,5 +22,7 @@ from blog.views import blog
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('blog.urls')),
+    # path('account/', include('django.contrib.auth.urls')),
+    path('account/', include('account.urls')),
     path('about/', TemplateView.as_view(template_name="about.html"), name='about'),
 ]

@@ -15,6 +15,11 @@ class Category(models.Model):
     def __str__(self):
         return self.title
 
+    class Meta:
+        verbose_name = 'Category'
+        verbose_name_plural = 'Categories'
+        ordering = ['id']
+
 
 class Blog(models.Model):
     title = models.CharField(max_length=255)
@@ -25,6 +30,7 @@ class Blog(models.Model):
     author = models.ForeignKey(
         'auth.User',
         on_delete=models.CASCADE,
+        # null=True
     )
 
     def __str__(self):

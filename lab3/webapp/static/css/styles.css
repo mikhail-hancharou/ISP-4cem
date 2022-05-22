@@ -32,8 +32,95 @@ header {
 #main-style {
     font-family: 'Playfair Display', serif;
     font-size: 25px;
-     white-space: normal;
+    white-space: normal;
 }
 
+#main-btn {
+    margin-top: 6px !important;
+}
 
+.form-input {
+    font-family: 'Playfair Display', serif;
+    width: 300px;
+    font-size: 16px;
+    display: inline-block;
+    float: left;
+    padding-left: 100px;
+    padding-right: 100px;
+}
+
+.form-label {
+    font-family: 'Playfair Display', serif;
+    min-width: 150px;
+    vertical-align: top;
+}
+
+.categories {
+    color: #F90B6D;
+    font-family: 'Playfair Display', serif;
+    font-weight: 300;
+    line-height: 40px;
+}
+
+.category {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    position: relative;
+    margin-left: 10px;
+    font-style: oblique;
+}
+
+.list-group {
+    scrollbar-width: none;
+    max-height: 300px;
+    max-width: 400px;
+    overflow:scroll;
+    -webkit-overflow-scrolling: touch;
+}
+
+.list-group-item {
+    color: #F90B6D !important;
+    background-color: lavender !important;
+}
+
+.list-group-item:hover {
+    border-width: 2px;
+    border-color: #F90B6D;
+    background-color: lightsteelblue !important;
+}
+
+.title {
+   color: black;
+   font-family: 'Playfair Display', serif;
+   font-size: 30px;
+   font-weight: 300;
+   line-height: 40px;
+   margin: 10px 0px 10px 1px;
+   transition: 0.5s linear;
+}
+
+.title:hover {
+   color: black;
+}
+
+.home-blogs {
+    font-family: 'Playfair Display', serif;
+    font-size: 25px;
+}
+
+.edit-del {
+    color: black;
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    text-decoration: none;
+    transition: 0.5s linear;
+}
+
+.edit-del:hover {
+    color: black;
+}
+
+.detail-btn {
+    margin-top: 40px;
+}
 
