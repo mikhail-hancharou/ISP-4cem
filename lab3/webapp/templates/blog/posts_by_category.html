@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 
-{% block page-header %}Home{% endblock %}
+{% block page-header %}Category{% endblock %}
 {% block content %}
 <div class="container-xxl">
-    <aside style="position: absolute; left: 550px; padding-top: 30px; padding-right: 250px;">
     {% for post in page_obj %}
+        <div class="post-entry" onclick="location.href='{% url 'post_detail' post.pk %}';">
             <h2 class="title">
                 <a href="{% url 'post_detail' post.pk %}" class="title">{{ post.title }}</a>
                 <span>
@@ -17,23 +17,12 @@
             <h3 class="home-blogs">{{ post.content|truncatechars:255 }}</h3>
             <h3 class="home-blogs"><span>By </span>{{ post.author.username }}</h3>
             <h3 class="home-blogs" style="margin-bottom: 40px;"><span>Last update </span>{{ post.time_update }}</h3>
+        </div>
+    {% empty %}
+        <h2>No items</h2>
     {% endfor %}
-    </aside>
-    <aside style="position: relative; right: 70px; padding-top: 30px; width: 20%;">
-        <h2 class="categories">Categories:</h2>
-            <ul class="list-group">
-                {% for category in all_categories %}
-                    <a href="{% url 'posts_by_category' category.title %}" class="list-group-item list-group-item-action">
-                        <i class="fas fa-link"></i>
-                        {{ category }}
-                    </a>
-                {% empty %}
-                     <p class="category">- No categories</p>
-                {% endfor %}
-            </ul>
-    </aside>
 
-    <nav class="my-paginator" aria-label="" style="position: absolute; right: 700px; bottom: -250px;">
+<nav class="my-paginator" aria-label="" style="position: absolute; right: 700px; bottom: -250px;">
         <ul class="pagination my-primary">
             {% if page_obj.has_previous %}
                 <li class="page-item">
@@ -59,4 +48,5 @@
         </ul>
     </nav>
 </div>
+
 {% endblock %}

@@ -43,8 +43,8 @@ class BlogListView(ListView):
 
 
 class CategoryPostList(ListView):
-    paginate_by = 2
-    template_name = 'posts_by_category.html'
+    paginate_by = 4
+    template_name = 'blog/posts_by_category.html'
 
     def get_queryset(self):
         return Blog.objects.filter(categories__title=self.kwargs['category'])
@@ -52,21 +52,14 @@ class CategoryPostList(ListView):
 
 class BlogDetailView(DetailView):
     model = Blog
-    template_name = 'post_detail.html'
+    template_name = 'blog/post_detail.html'
 
 
 class BlogUpdateView(UpdateView):
+    model = Blog
     form_class = AddBlogForm
     template_name = 'blog/post_edit.html'
-    success_url = reverse_lazy('post_detail')
 
-    def get_object(self, queryset=None):
-        obj = super(BlogUpdateView, self).get_object(queryset)
-        if obj.author != self.request.user:
-            messages.error(self.request, "You can't edit this post")
-            logger.error("Attempt to get an access to update function")
-            raise Http404("You don't own this object")
-        return obj
 
 
 '''class BlogUpdateView(UpdateView):
@@ -85,7 +78,7 @@ class BlogUpdateView(UpdateView):
 
 class BlogDeleteView(DeleteView):
     model = Blog
-    template_name = 'post_delete.html'
+    template_name = 'blog/post_delete.html'
     success_url = reverse_lazy('home')
 
     def get_object(self, queryset=None):

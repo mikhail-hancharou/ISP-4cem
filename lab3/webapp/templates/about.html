@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static%}
 {% block title %}About{% endblock %}
 {% block page-header %}About app{% endblock %}
 {% block content %}
@@ -6,6 +7,7 @@
     <div>
         <p id="main-style">Developer: Mikhail Hancharou</p>
         <p id="main-style">Version: 1.0</p>
+        <img src="{% static 'images/b.png' %}">
     </div>
  </div>
-{% endblock content %}
+{% endblock %}
