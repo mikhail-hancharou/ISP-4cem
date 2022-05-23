@@ -61,21 +61,6 @@ class BlogUpdateView(UpdateView):
     template_name = 'blog/post_edit.html'
 
 
-
-'''class BlogUpdateView(UpdateView):
-    model = Blog
-    template_name = 'post_edit.html'
-    fields = ['title', 'content', 'categories']
-
-    def get_object(self, queryset=None):
-        obj = super(BlogUpdateView, self).get_object(queryset)
-        if obj.author != self.request.user:
-            messages.error(self.request, "You can't edit this post")
-            logger.error("Attempt to get an access to update function")
-            raise Http404("You don't own this object")
-        return obj'''
-
-
 class BlogDeleteView(DeleteView):
     model = Blog
     template_name = 'blog/post_delete.html'
@@ -85,6 +70,6 @@ class BlogDeleteView(DeleteView):
         obj = super(BlogDeleteView, self).get_object(queryset)
         if obj.author != self.request.user:
             messages.error(self.request, "You can't edit this post")
-            logger.error("Attempt to get an access to delete function")
+            logger.error(f"Attempt to get an access to delete function{obj.author} - {self.request.user}")
             raise Http404("You don't own this object")
         return obj
