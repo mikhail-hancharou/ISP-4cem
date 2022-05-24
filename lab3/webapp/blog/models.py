@@ -27,6 +27,7 @@ class Blog(models.Model):
     time_create = models.DateTimeField(auto_now_add=True)
     time_update = models.DateTimeField(auto_now=True)
     categories = models.ManyToManyField(Category, related_name='topics')
+    photo = models.ImageField(upload_to='media/photos/%Y/%m/%d/', blank=True)
     author = models.ForeignKey(
         'auth.User',
         on_delete=models.CASCADE)
@@ -44,6 +45,7 @@ class Comment(models.Model):
     author = models.ForeignKey(
         'auth.User',
         on_delete=models.CASCADE)
+    blog = models.ForeignKey(Blog, on_delete=models.CASCADE)
 
     def get_absolute_url(self):
         return reverse('post_detail', args=[str(self.id)])  # post blog

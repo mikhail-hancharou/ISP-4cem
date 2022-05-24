@@ -4,7 +4,7 @@
 {% block content %}
 <div class="container-xxl">
     {% if user.is_authenticated and user.pk == object.author.id %}
-        <form class="post-entry" style="border: none; height: 700px; width: 1000px;" action="" method="post">
+        <form class="post-entry" style="border: none; height: 700px; width: 1000px;" action="" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             {{ form.as_p }}
             <div class="inputContainer">

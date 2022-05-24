@@ -6,8 +6,8 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, UpdateView, DeleteView, CreateView
 
-from blog.forms import AddBlogForm
-from blog.models import Blog, Category
+from blog.forms import AddBlogForm, AddCommentForm
+from blog.models import Blog, Category, Comment
 
 logger = logging.getLogger('django')
 
@@ -61,19 +61,35 @@ class MyPostsList(ListView):
         return Blog.objects.filter(author__pk=self.request.user.pk)
 
 
-class BlogDetailView(DetailView):
-    model = Blog
+class BlogDetailView(CreateView):
+    # model = Blog
     template_name = 'blog/post_detail.html'
-
-    form_class = AddBlogForm
-    template_name = 'blog/post_new.html'
-    success_url = reverse_lazy('home')
+    form_class = AddCommentForm
+    # success_url = reverse_lazy('post_detail')
 
     def form_valid(self, form):
         obj = form.save(commit=False)
+        id = self.kwargs['pk']
         obj.author = self.request.user
+        obj.blog = Blog.objects.get(pk=id)
         obj.save()
+        # self.success_url = reverse_lazy(f'post/{id}')
         return super(BlogDetailView, self).form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['under_vision_blog'] = Blog.objects.get(pk=self.kwargs['pk'])
+        context['comments'] = Comment.objects.filter(blog__pk=self.kwargs['pk'])
+        print(context)
+        return context
+
+    def get_success_url(self):
+        return self.request.path
+
+    '''def get_queryset(self):
+        temp = self.kwargs['pk']
+        print(f'ffffffffffffffffffffffffffffffffffffff{temp}')
+        return Blog.objects.filter(pk=self.kwargs['pk'])'''
 
 
 class BlogUpdateView(UpdateView):
