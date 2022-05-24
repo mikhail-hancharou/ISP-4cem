@@ -29,12 +29,21 @@ class Blog(models.Model):
     categories = models.ManyToManyField(Category, related_name='topics')
     author = models.ForeignKey(
         'auth.User',
-        on_delete=models.CASCADE,
-        # null=True
-    )
+        on_delete=models.CASCADE)
 
     def __str__(self):
         return self.title
+
+    def get_absolute_url(self):
+        return reverse('post_detail', args=[str(self.id)])  # post blog
+
+
+class Comment(models.Model):
+    content = models.TextField(max_length=1000)
+    time_create = models.DateTimeField(auto_now_add=True)
+    author = models.ForeignKey(
+        'auth.User',
+        on_delete=models.CASCADE)
 
     def get_absolute_url(self):
         return reverse('post_detail', args=[str(self.id)])  # post blog

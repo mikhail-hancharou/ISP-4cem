@@ -3,7 +3,7 @@
 {% block page-header %}Home{% endblock %}
 {% block content %}
 <div class="container-xxl">
-    <aside style="position: absolute; left: 550px; padding-top: 30px; padding-right: 250px;">
+    <aside style="position: absolute; left: 550px; padding-top: 30px; padding-right: 250px; margin-bottom: 200px;">
     {% for post in page_obj %}
             <h2 class="title">
                 <a href="{% url 'post_detail' post.pk %}" class="title">{{ post.title }}</a>
@@ -18,22 +18,7 @@
             <h3 class="home-blogs"><span>By </span>{{ post.author.username }}</h3>
             <h3 class="home-blogs" style="margin-bottom: 40px;"><span>Last update </span>{{ post.time_update }}</h3>
     {% endfor %}
-    </aside>
-    <aside style="position: relative; right: 70px; padding-top: 30px; width: 20%;">
-        <h2 class="categories">Categories:</h2>
-            <ul class="list-group">
-                {% for category in all_categories %}
-                    <a href="{% url 'posts_by_category' category.title %}" class="list-group-item list-group-item-action">
-                        <i class="fas fa-link"></i>
-                        {{ category }}
-                    </a>
-                {% empty %}
-                     <p class="category">- No categories</p>
-                {% endfor %}
-            </ul>
-    </aside>
-
-    <nav class="my-paginator" aria-label="" style="position: absolute; right: 700px; bottom: -250px;">
+        <nav class="my-paginator" aria-label="" style="position: absolute; right: 700px; bottom: -200px;">
         <ul class="pagination my-primary">
             {% if page_obj.has_previous %}
                 <li class="page-item">
@@ -58,5 +43,19 @@
             {% endif %}
         </ul>
     </nav>
+    </aside>
+    <aside style="position: relative; right: 70px; padding-top: 30px; width: 20%;">
+        <h2 class="categories">Categories:</h2>
+            <ul class="list-group">
+                {% for category in all_categories %}
+                    <a href="{% url 'posts_by_category' category.title %}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-link"></i>
+                        {{ category }}
+                    </a>
+                {% empty %}
+                     <p class="category">- No categories</p>
+                {% endfor %}
+            </ul>
+    </aside>
 </div>
 {% endblock %}

@@ -12,6 +12,12 @@ class SignUpView(generic.CreateView):
     template_name = 'account/signup.html'
 
 
+'''class SignUpPubView(generic.CreateView):
+    form_class = RegisterPublisherForm
+    success_url = reverse_lazy('login')
+    template_name = 'account/signup.html'''
+
+
 def logout_user(request):
     logout(request)
     return redirect('login')

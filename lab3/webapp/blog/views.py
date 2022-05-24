@@ -12,10 +12,6 @@ from blog.models import Blog, Category
 logger = logging.getLogger('django')
 
 
-def blog(request):
-    return render(request, "home.html")
-
-
 class BlogCreateView(CreateView):
     form_class = AddBlogForm
     template_name = 'blog/post_new.html'
@@ -30,10 +26,10 @@ class BlogCreateView(CreateView):
 
 class BlogListView(ListView):
     paginate_by = 4
-    model = Blog
+    # model = Blog
     template_name = 'home.html'
 
-    # queryset = Blog.objects.order_by('-publication_date')
+    queryset = Blog.objects.order_by('-time_create')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -45,14 +41,39 @@ class BlogListView(ListView):
 class CategoryPostList(ListView):
     paginate_by = 4
     template_name = 'blog/posts_by_category.html'
+    context_object_name = 'blogs_with_category'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['category'] = self.kwargs['category']
+        print(context)
+        return context
 
     def get_queryset(self):
         return Blog.objects.filter(categories__title=self.kwargs['category'])
 
 
+class MyPostsList(ListView):
+    template_name = 'blog/my_posts.html'
+    context_object_name = 'my_blogs'
+
+    def get_queryset(self):
+        return Blog.objects.filter(author__pk=self.request.user.pk)
+
+
 class BlogDetailView(DetailView):
     model = Blog
     template_name = 'blog/post_detail.html'
+
+    form_class = AddBlogForm
+    template_name = 'blog/post_new.html'
+    success_url = reverse_lazy('home')
+
+    def form_valid(self, form):
+        obj = form.save(commit=False)
+        obj.author = self.request.user
+        obj.save()
+        return super(BlogDetailView, self).form_valid(form)
 
 
 class BlogUpdateView(UpdateView):
