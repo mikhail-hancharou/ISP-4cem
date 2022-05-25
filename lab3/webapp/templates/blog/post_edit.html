@@ -6,11 +6,15 @@
     {% if user.is_authenticated and user.pk == object.author.id %}
         <form class="post-entry" style="border: none; height: 700px; width: 1000px;" action="" method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            {{ form.as_p }}
-            <div class="inputContainer">
-                <i class="fas fa-pen icon"></i>
-                <input class="field" type="submit" value="Update" />
-            </div>
+            <div class="form-error">{{ form.non_field_errors }}</div>
+            <p class="form-label"><label class="form-label" for="{{ form.photo.id_for_title }}">{{ form.photo.label }}: </label></p>
+            <div class="form-error">{{ f.errors }}</div>
+            {% for f in form %}
+            <p class="form-label"><label class="form-label" for="{{ f.id_for_title }}">{{ f.label }}: </label>{{ f }}</p>
+            <div class="form-error">{{ f.errors }}</div>
+            {% endfor %}
+            <input class="field" type="submit" value="Update" />
+
         </form>
     {% endif %}
 </div>

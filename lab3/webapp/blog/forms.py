@@ -8,10 +8,8 @@ class AddBlogForm(forms.ModelForm):
         fields = ['title', 'content', 'photo', 'categories']
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-input'}),
-            'content': forms.Textarea(attrs={'cols': 70, 'rows': 15}),
+            'content': forms.Textarea(attrs={'cols': 70, 'rows': 15})
         }
-
-    # photo = forms.ImageField(required=False)
 
     categories = forms.ModelMultipleChoiceField(
         widget=forms.CheckboxSelectMultiple,

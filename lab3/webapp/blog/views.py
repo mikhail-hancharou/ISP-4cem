@@ -65,20 +65,24 @@ class BlogDetailView(CreateView):
     # model = Blog
     template_name = 'blog/post_detail.html'
     form_class = AddCommentForm
+
     # success_url = reverse_lazy('post_detail')
 
     def form_valid(self, form):
         obj = form.save(commit=False)
-        id = self.kwargs['pk']
         obj.author = self.request.user
-        obj.blog = Blog.objects.get(pk=id)
+        obj.blog = Blog.objects.get(pk=self.kwargs['pk'])
         obj.save()
-        # self.success_url = reverse_lazy(f'post/{id}')
         return super(BlogDetailView, self).form_valid(form)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['under_vision_blog'] = Blog.objects.get(pk=self.kwargs['pk'])
+        try:
+            context['under_vision_blog'] = Blog.objects.get(pk=self.kwargs['pk'])
+        except:
+            messages.error(self.request, "There no blog with this id")
+            logger.error(f"Attempt to get blog that does not exist")
+            raise Http404("No such blog")
         context['comments'] = Comment.objects.filter(blog__pk=self.kwargs['pk'])
         print(context)
         return context
