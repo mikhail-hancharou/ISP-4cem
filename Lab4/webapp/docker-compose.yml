@@ -1,0 +1,31 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB='db_django'
+      - POSTGRES_USER='mikhail'
+      - POSTGRES_PASSWORD='pizza'
+      - POSTGRES_HOST=db
+  web:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/web_django
+    ports:
+      - "8000:8000"
+    environment:
+      - POSTGRES_NAME='db_django'
+      - POSTGRES_USER='mikhail'
+      - POSTGRES_PASSWORD='pizza'
+      - POSTGRES_HOST=db
+    depends_on:
+      - db
+  redis:
+    image: redis
+    ports:
+     - "6379:6379"
+

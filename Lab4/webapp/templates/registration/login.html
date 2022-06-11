@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block page-header %}Log in{% endblock %}
+{% block content %}
+<div class="container-xxl" style="padding-top: 150px; padding-left: 200px">
+    <form method="post">
+        {% csrf_token %}
+        {% if user.is_authenticated %}
+            <p>You are already signed in!</p>
+        {% else %}
+          {{ form.as_p }}
+          <button type="submit">Log In</button>
+        {% endif %}
+    </form>
+</div>
+{% endblock content %}

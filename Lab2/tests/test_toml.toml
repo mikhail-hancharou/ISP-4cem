@@ -1,0 +1,212 @@
+[__object__]
+__name__ = "MyClass"
+
+[__object__.__attrs__.class_v]
+int = 10
+
+[__object__.__attrs__.br.__func__]
+__name__ = "br"
+
+[__object__.__attrs__.cl.__func__]
+__name__ = "cl"
+
+[__object__.__attrs__.br.__func__.__globals__]
+
+[__object__.__attrs__.br.__func__.__args__.co_lines]
+str = "<built-in method co_lines of code object at 0x0000025B9FC575D0>"
+
+[__object__.__attrs__.br.__func__.__args__.co_argcount]
+int = 1
+
+[__object__.__attrs__.br.__func__.__args__.co_posonlyargcount]
+int = 0
+
+[__object__.__attrs__.br.__func__.__args__.co_kwonlyargcount]
+int = 0
+
+[__object__.__attrs__.br.__func__.__args__.co_nlocals]
+int = 1
+
+[__object__.__attrs__.br.__func__.__args__.co_stacksize]
+int = 2
+
+[__object__.__attrs__.br.__func__.__args__.co_flags]
+int = 67
+
+[__object__.__attrs__.br.__func__.__args__.co_code]
+[[__object__.__attrs__.br.__func__.__args__.co_code.bytes]]
+int = 124
+
+[[__object__.__attrs__.br.__func__.__args__.co_code.bytes]]
+int = 0
+
+[[__object__.__attrs__.br.__func__.__args__.co_code.bytes]]
+int = 124
+
+[[__object__.__attrs__.br.__func__.__args__.co_code.bytes]]
+int = 0
+
+[[__object__.__attrs__.br.__func__.__args__.co_code.bytes]]
+int = 20
+
+[[__object__.__attrs__.br.__func__.__args__.co_code.bytes]]
+int = 0
+
+[[__object__.__attrs__.br.__func__.__args__.co_code.bytes]]
+int = 83
+
+[[__object__.__attrs__.br.__func__.__args__.co_code.bytes]]
+int = 0
+
+[__object__.__attrs__.br.__func__.__args__.co_consts]
+[[__object__.__attrs__.br.__func__.__args__.co_consts.list]]
+
+[__object__.__attrs__.br.__func__.__args__.co_names]
+list = []
+
+[__object__.__attrs__.br.__func__.__args__.co_varnames]
+[[__object__.__attrs__.br.__func__.__args__.co_varnames.list]]
+str = "y"
+
+[__object__.__attrs__.br.__func__.__args__.co_freevars]
+list = []
+
+[__object__.__attrs__.br.__func__.__args__.co_cellvars]
+list = []
+
+[__object__.__attrs__.br.__func__.__args__.co_filename]
+str = "C:\\Users\\engen\\Desktop\\4ctv\\ISP\\lab2\\tests\\tests.py"
+
+[__object__.__attrs__.br.__func__.__args__.co_name]
+str = "br"
+
+[__object__.__attrs__.br.__func__.__args__.co_firstlineno]
+int = 37
+
+[__object__.__attrs__.br.__func__.__args__.co_linetable]
+[[__object__.__attrs__.br.__func__.__args__.co_linetable.bytes]]
+int = 8
+
+[[__object__.__attrs__.br.__func__.__args__.co_linetable.bytes]]
+int = 2
+
+[__object__.__attrs__.br.__func__.__args__.co_lnotab]
+[[__object__.__attrs__.br.__func__.__args__.co_lnotab.bytes]]
+int = 0
+
+[[__object__.__attrs__.br.__func__.__args__.co_lnotab.bytes]]
+int = 2
+
+[__object__.__attrs__.cl.__func__.__globals__.x]
+int = 50
+
+[__object__.__attrs__.cl.__func__.__args__.co_lines]
+str = "<built-in method co_lines of code object at 0x0000025B9FC57520>"
+
+[__object__.__attrs__.cl.__func__.__args__.co_argcount]
+int = 2
+
+[__object__.__attrs__.cl.__func__.__args__.co_posonlyargcount]
+int = 0
+
+[__object__.__attrs__.cl.__func__.__args__.co_kwonlyargcount]
+int = 0
+
+[__object__.__attrs__.cl.__func__.__args__.co_nlocals]
+int = 2
+
+[__object__.__attrs__.cl.__func__.__args__.co_stacksize]
+int = 3
+
+[__object__.__attrs__.cl.__func__.__args__.co_flags]
+int = 67
+
+[__object__.__attrs__.cl.__func__.__args__.co_code]
+[[__object__.__attrs__.cl.__func__.__args__.co_code.bytes]]
+int = 116
+
+[[__object__.__attrs__.cl.__func__.__args__.co_code.bytes]]
+int = 0
+
+[[__object__.__attrs__.cl.__func__.__args__.co_code.bytes]]
+int = 124
+
+[[__object__.__attrs__.cl.__func__.__args__.co_code.bytes]]
+int = 0
+
+[[__object__.__attrs__.cl.__func__.__args__.co_code.bytes]]
+int = 106
+
+[[__object__.__attrs__.cl.__func__.__args__.co_code.bytes]]
+int = 1
+
+[[__object__.__attrs__.cl.__func__.__args__.co_code.bytes]]
+int = 124
+
+[[__object__.__attrs__.cl.__func__.__args__.co_code.bytes]]
+int = 1
+
+[[__object__.__attrs__.cl.__func__.__args__.co_code.bytes]]
+int = 24
+
+[[__object__.__attrs__.cl.__func__.__args__.co_code.bytes]]
+int = 0
+
+[[__object__.__attrs__.cl.__func__.__args__.co_code.bytes]]
+int = 20
+
+[[__object__.__attrs__.cl.__func__.__args__.co_code.bytes]]
+int = 0
+
+[[__object__.__attrs__.cl.__func__.__args__.co_code.bytes]]
+int = 83
+
+[[__object__.__attrs__.cl.__func__.__args__.co_code.bytes]]
+int = 0
+
+[__object__.__attrs__.cl.__func__.__args__.co_consts]
+[[__object__.__attrs__.cl.__func__.__args__.co_consts.list]]
+
+[__object__.__attrs__.cl.__func__.__args__.co_names]
+[[__object__.__attrs__.cl.__func__.__args__.co_names.list]]
+str = "x"
+
+[[__object__.__attrs__.cl.__func__.__args__.co_names.list]]
+str = "class_v"
+
+[__object__.__attrs__.cl.__func__.__args__.co_varnames]
+[[__object__.__attrs__.cl.__func__.__args__.co_varnames.list]]
+str = "self"
+
+[[__object__.__attrs__.cl.__func__.__args__.co_varnames.list]]
+str = "y"
+
+[__object__.__attrs__.cl.__func__.__args__.co_freevars]
+list = []
+
+[__object__.__attrs__.cl.__func__.__args__.co_cellvars]
+list = []
+
+[__object__.__attrs__.cl.__func__.__args__.co_filename]
+str = "C:\\Users\\engen\\Desktop\\4ctv\\ISP\\lab2\\tests\\tests.py"
+
+[__object__.__attrs__.cl.__func__.__args__.co_name]
+str = "cl"
+
+[__object__.__attrs__.cl.__func__.__args__.co_firstlineno]
+int = 34
+
+[__object__.__attrs__.cl.__func__.__args__.co_linetable]
+[[__object__.__attrs__.cl.__func__.__args__.co_linetable.bytes]]
+int = 14
+
+[[__object__.__attrs__.cl.__func__.__args__.co_linetable.bytes]]
+int = 1
+
+[__object__.__attrs__.cl.__func__.__args__.co_lnotab]
+[[__object__.__attrs__.cl.__func__.__args__.co_lnotab.bytes]]
+int = 0
+
+[[__object__.__attrs__.cl.__func__.__args__.co_lnotab.bytes]]
+int = 1
+

@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block page-header %}Category{% endblock %}
+{% block content %}
+<div class="container-xxl">
+    <h class="title">Blogs with category "{{ category }}"</h>
+    {% for post in blogs_with_category %}
+        <div class="post-entry" onclick="location.href='{% url 'post_detail' post.pk %}';">
+            <h2 class="title">
+                <a href="{% url 'post_detail' post.pk %}" class="title">{{ post.title }}</a>
+                <span>
+                    {% if user.is_authenticated and user.pk == post.author.id %}
+                        <a class="edit-del" href='{% url "post_edit" post.pk %}'>Edit<i class="fas fa-edit"></i></a>
+                        <a class="edit-del" href='{% url "post_delete" post.pk %}'>Delete<i class="fas fa-trash-alt"></i></a>
+                    {% endif %}
+                </span>
+            </h2>
+            <h3 class="home-blogs">{{ post.content|truncatechars:255 }}</h3>
+            <h3 class="home-blogs"><span>By </span>{{ post.author.username }}</h3>
+            <h3 class="home-blogs" style="margin-bottom: 40px;"><span>Last update </span>{{ post.time_update }}</h3>
+        </div>
+    {% empty %}
+        <h2>No items</h2>
+    {% endfor %}
+
+<nav class="my-paginator" aria-label="" style="position: absolute; right: 700px; bottom: -250px;">
+        <ul class="pagination my-primary">
+            {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="paginator-block page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <a class="bg-dark border-dark page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+                </li>
+            {% endif %}
+                <li class="page-item active" aria-current="page">
+                    <a class="paginator-block border-dark page-link" href="#">{{ page_obj.number }}</a>
+                </li>
+            {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="border-dark paginator-block page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <a class="border-dark page-link" href="#" tabindex="-1" aria-disabled="true">Next</a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+</div>
+
+{% endblock %}

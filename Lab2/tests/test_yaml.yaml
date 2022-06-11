@@ -1,0 +1,126 @@
+__object__:
+  __attrs__:
+    br:
+      __func__:
+        __args__:
+          co_argcount:
+            int: 1
+          co_cellvars:
+            list: []
+          co_code:
+            bytes:
+            - int: 124
+            - int: 0
+            - int: 124
+            - int: 0
+            - int: 20
+            - int: 0
+            - int: 83
+            - int: 0
+          co_consts:
+            list:
+            - None: null
+          co_filename:
+            str: C:\Users\engen\Desktop\4ctv\ISP\lab2\tests\tests.py
+          co_firstlineno:
+            int: 37
+          co_flags:
+            int: 67
+          co_freevars:
+            list: []
+          co_kwonlyargcount:
+            int: 0
+          co_lines:
+            str: <built-in method co_lines of code object at 0x0000025B9FC575D0>
+          co_linetable:
+            bytes:
+            - int: 8
+            - int: 2
+          co_lnotab:
+            bytes:
+            - int: 0
+            - int: 2
+          co_name:
+            str: br
+          co_names:
+            list: []
+          co_nlocals:
+            int: 1
+          co_posonlyargcount:
+            int: 0
+          co_stacksize:
+            int: 2
+          co_varnames:
+            list:
+            - str: y
+        __globals__: {}
+        __name__: br
+    cl:
+      __func__:
+        __args__:
+          co_argcount:
+            int: 2
+          co_cellvars:
+            list: []
+          co_code:
+            bytes:
+            - int: 116
+            - int: 0
+            - int: 124
+            - int: 0
+            - int: 106
+            - int: 1
+            - int: 124
+            - int: 1
+            - int: 24
+            - int: 0
+            - int: 20
+            - int: 0
+            - int: 83
+            - int: 0
+          co_consts:
+            list:
+            - None: null
+          co_filename:
+            str: C:\Users\engen\Desktop\4ctv\ISP\lab2\tests\tests.py
+          co_firstlineno:
+            int: 34
+          co_flags:
+            int: 67
+          co_freevars:
+            list: []
+          co_kwonlyargcount:
+            int: 0
+          co_lines:
+            str: <built-in method co_lines of code object at 0x0000025B9FC57520>
+          co_linetable:
+            bytes:
+            - int: 14
+            - int: 1
+          co_lnotab:
+            bytes:
+            - int: 0
+            - int: 1
+          co_name:
+            str: cl
+          co_names:
+            list:
+            - str: x
+            - str: class_v
+          co_nlocals:
+            int: 2
+          co_posonlyargcount:
+            int: 0
+          co_stacksize:
+            int: 3
+          co_varnames:
+            list:
+            - str: self
+            - str: y
+        __globals__:
+          x:
+            int: 50
+        __name__: cl
+    class_v:
+      int: 10
+  __name__: MyClass

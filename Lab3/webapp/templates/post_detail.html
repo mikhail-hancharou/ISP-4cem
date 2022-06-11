@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block page-header %}Post detail{% endblock %}
+{% block content %}
+<div class="container-xxl">
+    <aside style="position: absolute; left: 550px; padding-top: 30px; padding-right: 250px;">
+        <div>
+            <h2 class="title">{{ object.title }}</h2>
+            <h3 class="home-blogs">{{ object.content }}</h3>
+            <h3 class="home-blogs"><span>Created </span>{{ object.time_create }}</h3>
+            <h3 class="home-blogs"><span>Last update </span>{{ object.time_update }}</h3>
+        </div>
+    </aside>
+    <aside style="position: relative; right: 70px; padding-top: 30px; width: 20%;">
+        <h2 class="categories">Categories:</h2>
+            <ul class="list-group">
+                {% for category in object.categories.all %}
+                    <a href="{% url 'posts_by_category' category.title %}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-link"></i>
+                        {{ category }}
+                    </a>
+                {% empty %}
+                     <p class="category">- No categories</p>
+                {% endfor %}
+            </ul>
+    </aside>
+    {% if user.is_authenticated and user.pk == object.author.id %}
+    <p class="detail-btn">
+        <a href='{% url "post_edit" object.pk %}' class="btn btn-outline-primary" style="position: relative; left: -70px;">
+            <i class="fas fa-edit"></i>
+            Edit Blog Post
+        </a>
+        <a href="{% url 'post_delete' object.pk %}" class="btn btn-outline-danger" style="position: relative; left: -55px;">
+            <i class="fas fa-trash-alt"></i>
+            Delete Post
+        </a>
+    </p>
+    {% endif %}
+</div>
+{% endblock %}
